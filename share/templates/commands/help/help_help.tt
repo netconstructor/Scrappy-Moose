@@ -1,0 +1,19 @@
+i>
+i> Help documentation for `help`
+i> the `help` command is used to display a list of commands 
+i> understood by the cli and shell.
+i> 
+i> help
+i>  takes 1 argument
+i> 
+i>  1st argument
+i>    [command] (display help for a specific command - optional)
+i> 
+i> ...at the command-line
+i> sweetpea help [command]
+i> e.g. sweetpea help make
+i>
+i> ...in the shell
+i> help [command];
+i> e.g. help help;
+i> 

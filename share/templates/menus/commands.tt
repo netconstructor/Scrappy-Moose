@@ -1,0 +1,17 @@
+[% MACRO spacing(text) PERL %]
+    my $n = $stash->get('text');
+    print " " x ( 15 - length($n));
+[% END -%]
+:> 
+:> Here is a list of available commands...
+:> execute a command by name, followed by a ;
+:> e.g. command_name;
+:>
+:> *** For help with a specific command ***
+:> execute help followed by the specific command name
+:> e.g. help command_name;
+:> 
+[%- FOREACH c = s.stash.commands.keys.sort %]
+:> [%- c -%];[% spacing(c) %][%- s.stash.commands.$c.help -%]
+[% END %]
+:> 

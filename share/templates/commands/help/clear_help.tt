@@ -1,0 +1,14 @@
+i>
+i> Help documentation for `clear`
+i> the `clear` command is used to clear the terminal's buffer thus
+i> clearing the screen of distracting commands.
+i> 
+i> clear
+i>  (takes no arguments)
+i> 
+i> ...at the command-line
+i> (works in shell-mode only)
+i>
+i> ...in the shell
+i> clear;
+i> 

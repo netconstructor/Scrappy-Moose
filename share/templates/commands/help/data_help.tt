@@ -1,0 +1,30 @@
+i>
+i> Help documentation for `data`
+i> the `data` command is used to generate database data profiles
+i> for use in various automated functions (including ORM).
+i> 
+i> data
+i>  takes 4 arguments - 3 required
+i>  1st argument - required
+i>    -c (generate database data profiles)
+i>    -b (update database data profiles)
+i>  2nd argument - required
+i>    [dbi_datasource] (dbi datasource)
+i>  3rd argument - required
+i>    [username] (database user)
+i>  4th argument - optional
+i>    [password] (database password)
+i> 
+i> ...at the command-line
+i> sweetpea data -[c|u] dbi:driver:database username [password]
+i> e.g. sweetpea data -c dbi:mysql:database root
+i>
+i> ...in the shell
+i> data -[c|u] dbi:driver:database username [password];
+i> e.g. data -u dbi:mysql:database root
+i> 
+i> Note! SQLite databases don't require a username for access...
+i> however not supplying the `data` command with a user will cause
+i> the function to fail. Supply any username to bypass this issue.
+i> e.g. data -c dbi:SQLite:./foo.db foo
+i> 

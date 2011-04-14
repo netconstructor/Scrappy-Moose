@@ -1,0 +1,24 @@
+i>
+i> Help documentation for `mvc`
+i> the `mvc` command is used to generate boiler-plate code for 
+i> models, views, and controllers for use in the application.
+i> 
+i> mvc
+i>  takes 2 arguments
+i>  1st argument  - required
+i>    -m (generate code for a model)
+i>    -v (generate code for a view)
+i>    -c (generate code for a controller)
+i>  2nd argument  - required
+i>    [class_name] (name of the class to be generated)
+i> 
+i> ...at the command-line
+i> sweetpea mvc -[m|v|c] [class_name]
+i> e.g. sweetpea mvc -m Users
+i> e.g. sweetpea mvc -v Plain/Email
+i> e.g. sweetpea mvc -c Admin/Dashboard
+i>
+i> ...in the shell
+i> mvc -[s|b|f|p] [class_name];
+i> e.g. mvc -v HTML/Email;
+i> 

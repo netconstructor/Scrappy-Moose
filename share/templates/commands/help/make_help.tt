@@ -1,0 +1,25 @@
+i>
+i> Help documentation for `make`
+i> the `make` command is used to generate the application
+i> files and/or structure.
+i> 
+i> make
+i>  takes 1 argument - required
+i>  1st argument
+i>    -s (generate a script-only minimalist web app)
+i>    -b (generate a basic web app)
+i>    -f (generate a full-stack web app)
+i>    -p (generate a data profile (used in auto-validation, etc))
+i>      takes 1 argument - required
+i>      1st argument
+i>        [profile_name] (path and filename of the profile)
+i>          e.g. make -p new_dir/profile_name
+i> 
+i> ...at the command-line
+i> sweetpea make -[s|b|f|p]
+i> e.g. sweetpea make -s
+i>
+i> ...in the shell
+i> make -[s|b|f|p];
+i> e.g. make -s;
+i> 

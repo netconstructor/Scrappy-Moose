@@ -1,0 +1,17 @@
+:>
+[%- IF s.stash.flashes.size %]
+[%- FOREACH c = s.stash.flashes %]
+[%- IF (m = c.match('\?$')) %]
+?> [%- c -%]
+[%- ELSE %]
+:> [%- c -%]
+[% END %]
+[%- END %]
+[%- ELSE %]
+!> Something weird happened here. Please try again.
+[%- END %]
+[%- IF (m = c.match('\?$')) or !c %]
+:> 
+[%- ELSE %]
+:> 
+[%- END %]

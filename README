@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+
+use Scrappy;
+
+my  $scraper = Scrappy->new;
+    $scraper->random_user_agent('firefox', 'linux');
+    $scraper->allowed_domains('search.cpan.org');
+
+# using the standard scraping methods
+
+    $scraper->queue('http://search.cpan.org/recent'); # starting url
+    while (my $url = $scraper->queue->next) {
+        $scraper->get($url);
+    }
+
+# using the crawl method
+
+    $scraper->crawl('http://search.cpan.org/recent',
+        '#cpansearch li a' => sub {
+            # print all recent modules from search.cpan.org
+            print shift->text(), "\n";
+        }
+    );

@@ -1,0 +1,13 @@
+i>
+i> Help documentation for `quit`
+i> the `quit` command is used to safely exit the shell.
+i> 
+i> quit
+i>  (takes no arguments)
+i> 
+i> ...at the command-line
+i> (works in shell-mode only)
+i>
+i> ...in the shell
+i> quit;
+i> 

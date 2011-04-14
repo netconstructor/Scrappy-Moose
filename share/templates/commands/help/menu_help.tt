@@ -1,0 +1,13 @@
+i>
+i> Help documentation for `menu`
+i> the `menu` simply displays the master (main) menu and other info.
+i> 
+i> menu
+i>  (takes no arguments)
+i> 
+i> ...at the command-line
+i> (works in shell-mode only)
+i>
+i> ...in the shell
+i> menu;
+i> 
