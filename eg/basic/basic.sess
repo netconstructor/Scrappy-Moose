@@ -1,0 +1,122 @@
+--- 
+cookies: 
+  .google.com: 
+    NID: 
+      discard: ~
+      domain: .google.com
+      expires: '1319083665'
+      hash: 
+        HttpOnly: ~
+      key: NID
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: 46=YV4EtgULUO7qSCI_cxhSf2iUWJWxtsDStFsChMCVDeIm0o-bgzZ2BXO8V53GCJiiEWNF7yEYsvvPndLH_aMAm7jujG5TgFNXh_6Rzi780qj71Nx8UNWxHBqxOkG8yMVK
+      version: 0
+    PREF: 
+      discard: ~
+      domain: .google.com
+      expires: '1366344465'
+      hash: {}
+
+      key: PREF
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: ID=826d33478cc9205c:FF=0:TM=1303272465:LM=1303272465:S=I3SKe5pJIL73V3Iu
+      version: 0
+  .msn.com: 
+    CC: 
+      discard: ~
+      domain: .msn.com
+      expires: '1366344477'
+      hash: {}
+
+      key: CC
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: US
+      version: 0
+    CULTURE: 
+      discard: ~
+      domain: .msn.com
+      expires: '1303877277'
+      hash: {}
+
+      key: CULTURE
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: EN-US
+      version: 0
+    MC1: 
+      discard: ~
+      domain: .msn.com
+      expires: '1633374000'
+      hash: {}
+
+      key: MC1
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: V=3&GUID=92d207d021174ccfb5b2d27e9b49f4df
+      version: 0
+    expid: 
+      discard: ~
+      domain: .msn.com
+      expires: '1304482077'
+      hash: {}
+
+      key: expid
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: id=adba825af750421a95bbd587c78f2998&bd=2011-04-20T04:07:57.014&v=2
+      version: 0
+    mh: 
+      discard: ~
+      domain: .msn.com
+      expires: '1366344477'
+      hash: {}
+
+      key: mh
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: MSFT
+      version: 0
+  www.aol.com: 
+    JSESSIONID: 
+      discard: 1
+      domain: www.aol.com
+      expires: ~
+      hash: {}
+
+      key: JSESSIONID
+      path: /aol
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: 3D7C0208A13D34277647301B78740202
+      version: 0
+    tst: 
+      discard: ~
+      domain: www.aol.com
+      expires: '1366344487'
+      hash: {}
+
+      key: tst
+      path: /
+      path_spec: 1
+      port: ~
+      secure: ~
+      val: "%2C1%2Cs391a%3A%2C1%2Cs392a%3A%2C1%2Cs393a%3A%2C1%2Cs394a%3A%2C1%2Cs395a%3A%2C1%2Cs396a%3A%2C1%2Cs397a"
+      version: 0

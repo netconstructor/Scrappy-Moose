@@ -1,0 +1,23 @@
+--- 
+info: 
+  - 
+    notation: http://google.com was fetched successfully
+    occurred: 2011-04-20 04:03:51
+  - 
+    notation: http://www.google.com was fetched successfully
+    occurred: 2011-04-20 04:07:39
+  - 
+    notation: processing was halted for 11 seconds
+    occurred: 2011-04-20 04:07:39
+  - 
+    notation: http://www.msn.com was fetched successfully
+    occurred: 2011-04-20 04:07:51
+  - 
+    notation: processing was halted for 10 seconds
+    occurred: 2011-04-20 04:07:51
+  - 
+    notation: http://www.aol.com was fetched successfully
+    occurred: 2011-04-20 04:08:01
+  - 
+    notation: processing was halted for 13 seconds
+    occurred: 2011-04-20 04:08:01

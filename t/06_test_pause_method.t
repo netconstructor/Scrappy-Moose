@@ -3,28 +3,28 @@
 use Test::More tests => 19;
 
 use Scrappy;
-my  $scraper = Scrappy->new;
+my  $scrappy = Scrappy->new;
 
 # test pause method
-ok 0 == $scraper->pause;
-ok $scraper->pause(20);
-ok 20 == $scraper->pause(20);
-ok 20 == $scraper->pause;
-ok $scraper->pause(5,20);
+ok 0 == $scrappy->pause;
+ok $scrappy->pause(20);
+ok 20 == $scrappy->pause(20);
+ok 20 == $scrappy->pause;
+ok $scrappy->pause(5,20);
 
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok $scraper->pause >= 5 && $scraper->pause <= 20;
-ok defined $scraper->pause(0);
-ok defined $scraper->pause;
-ok ! $scraper->pause;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok $scrappy->pause >= 5 && $scrappy->pause <= 20;
+ok defined $scrappy->pause(0);
+ok defined $scrappy->pause;
+ok ! $scrappy->pause;
 
-# warn $scraper->pause;
+# warn $scrappy->pause;

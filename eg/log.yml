@@ -1,0 +1,110 @@
+--- 
+info: 
+  - 
+    notation: http://search.cpan.org/recent was fetched successfully
+    occurred: 2011-04-20 10:41:20
+  - 
+    notation: http://search.cpan.org/~adamk/Params-Util-1.04/ was fetched successfully
+    occurred: 2011-04-20 10:41:23
+  - 
+    notation: http://search.cpan.org/~onlyjob/FCGI-Daemon-0.20110420_02/ was fetched successfully
+    occurred: 2011-04-20 10:41:23
+  - 
+    notation: http://search.cpan.org/~shlomif/App-XML-DocBook-Builder-0.0300/ was fetched successfully
+    occurred: 2011-04-20 10:41:24
+  - 
+    notation: http://search.cpan.org/~dwmyers/Sport-Analytics-SimpleRanking-0.12/ was fetched successfully
+    occurred: 2011-04-20 10:41:25
+  - 
+    notation: http://search.cpan.org/~mpultz/Speech-Swift-Simple-1.1/ was fetched successfully
+    occurred: 2011-04-20 10:41:25
+  - 
+    notation: http://search.cpan.org/~gray/Compress-Snappy-0.11_2/ was fetched successfully
+    occurred: 2011-04-20 10:41:26
+  - 
+    notation: http://search.cpan.org/~onlyjob/FCGI-Daemon-0.20110420_01/ was fetched successfully
+    occurred: 2011-04-20 10:41:26
+  - 
+    notation: http://search.cpan.org/~mateu/Weather-WWO-0.04/ was fetched successfully
+    occurred: 2011-04-20 10:41:26
+  - 
+    notation: http://search.cpan.org/~rsavage/Locale-Country-SubCountry-1.01/ was fetched successfully
+    occurred: 2011-04-20 10:41:27
+  - 
+    notation: http://search.cpan.org/~rsavage/HTML-YUI3-Menu-1.01/ was fetched successfully
+    occurred: 2011-04-20 10:41:27
+  - 
+    notation: http://search.cpan.org/~rsavage/Business-Cart-Generic-0.81/ was fetched successfully
+    occurred: 2011-04-20 10:41:28
+  - 
+    notation: http://search.cpan.org/~rsavage/Benchmark-Featureset-LocaleCountry-1.01/ was fetched successfully
+    occurred: 2011-04-20 10:41:30
+  - 
+    notation: http://search.cpan.org/~rsavage/App-Office-Contacts-1.16/ was fetched successfully
+    occurred: 2011-04-20 10:41:30
+  - 
+    notation: http://search.cpan.org/~rsrchboy/MooseX-Types-Tied-0.002/ was fetched successfully
+    occurred: 2011-04-20 10:41:31
+  - 
+    notation: http://search.cpan.org/~chocolate/B-Hooks-OP-Annotation-0.44/ was fetched successfully
+    occurred: 2011-04-20 10:41:32
+  - 
+    notation: http://search.cpan.org/~jesus/Net-RabbitMQ-0.2.0/ was fetched successfully
+    occurred: 2011-04-20 10:41:32
+  - 
+    notation: http://search.cpan.org/~doherty/Dist-Zilla-PluginBundle-Author-DOHERTY-0.017/ was fetched successfully
+    occurred: 2011-04-20 10:41:33
+  - 
+    notation: http://search.cpan.org/~doherty/Dist-Zilla-PluginBundle-TestingMania-0.009/ was fetched successfully
+    occurred: 2011-04-20 10:41:34
+  - 
+    notation: http://search.cpan.org/~doherty/Dist-Zilla-Plugin-Test-CPAN-Meta-JSON-0.003/ was fetched successfully
+    occurred: 2011-04-20 10:41:34
+  - 
+    notation: http://search.cpan.org/~maggiexyz/PDL-Stats-0.5.4/ was fetched successfully
+    occurred: 2011-04-20 10:41:35
+  - 
+    notation: http://search.cpan.org/~mpultz/Net-fonolo-1.4/ was fetched successfully
+    occurred: 2011-04-20 10:41:35
+  - 
+    notation: http://search.cpan.org/~mattn/Growl-Any-0.08/ was fetched successfully
+    occurred: 2011-04-20 10:41:36
+  - 
+    notation: http://search.cpan.org/~drolsky/Params-Validate-0.97/ was fetched successfully
+    occurred: 2011-04-20 10:41:37
+  - 
+    notation: http://search.cpan.org/~kxj/Mail-Send-Loop-0.2-withoutworldwriteables/ was fetched successfully
+    occurred: 2011-04-20 10:41:37
+  - 
+    notation: http://search.cpan.org/~kxj/Mail-Send-Loop-0.2/ was fetched successfully
+    occurred: 2011-04-20 10:41:37
+  - 
+    notation: http://search.cpan.org/~joshr/App-Jawk-0.04/ was fetched successfully
+    occurred: 2011-04-20 10:41:38
+  - 
+    notation: http://search.cpan.org/~kxj/Mail-Send-Loop-0.1-withoutworldwriteables/ was fetched successfully
+    occurred: 2011-04-20 10:41:38
+  - 
+    notation: http://search.cpan.org/~kxj/Mail-Send-Loop-0.1/ was fetched successfully
+    occurred: 2011-04-20 10:41:39
+  - 
+    notation: http://search.cpan.org/~mjgardner/XML-Ant-BuildFile-0.211/ was fetched successfully
+    occurred: 2011-04-20 10:41:40
+  - 
+    notation: http://search.cpan.org/~kraih/Mojolicious-1.19/ was fetched successfully
+    occurred: 2011-04-20 10:41:42
+  - 
+    notation: http://search.cpan.org/~leont/ExtUtils-Helpers-0.005/ was fetched successfully
+    occurred: 2011-04-20 10:41:43
+  - 
+    notation: http://search.cpan.org/~saxjazman/CIF-Archive-0.00_01/ was fetched successfully
+    occurred: 2011-04-20 10:41:43
+  - 
+    notation: http://search.cpan.org/~ddick/Crypt-URandom-0.0.27/ was fetched successfully
+    occurred: 2011-04-20 10:41:44
+  - 
+    notation: http://search.cpan.org/~leont/ExtUtils-Helpers-0.004/ was fetched successfully
+    occurred: 2011-04-20 10:41:45
+  - 
+    notation: http://search.cpan.org/~kraih/Mojolicious-1.18/ was fetched successfully
+    occurred: 2011-04-20 10:41:46

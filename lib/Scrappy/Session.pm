@@ -1,4 +1,4 @@
-# ABSTRACT: Scrappy Recorder and Session Management
+# ABSTRACT: Scrappy Session Storage Mechanism
 
 package Scrappy::Session;
 
@@ -15,11 +15,10 @@ use YAML::Syck;
     #!/usr/bin/perl
     use Scrappy;
 
-    my  $scraper = Scrappy->new;
-        $scraper->session->load('file.yml');
-        
-        $scraper->stash('foo' => 123); # writes back to file.yml automatically
-        $scraper->write('file.backup.yml');
+    my  $session = Scrappy::Session->new;
+        $session->load('file.yml');
+        $session->stash('foo' => 123); # writes back to file.yml automatically
+        $session->write('new_file.yml'); # writes new file based on memory
 
 =head1 DESCRIPTION
 
@@ -77,7 +76,14 @@ sub stash {
         my  $stash = @_ > 1 ? {@_} : $_[0];
         if($stash) {
             if (ref $stash eq 'HASH') {
-                $self->{stash}->{$_} = $stash->{$_} for keys %{$stash};
+                for (keys %{$stash}) {
+                    if (lc $_ ne ':file') {
+                        $self->{stash}->{$_} = $stash->{$_};
+                    }
+                    else {
+                        $self->{file}  = $stash->{$_};
+                    }
+                }
             }
             else {
                 return $self->{stash}->{$stash};
@@ -85,6 +91,7 @@ sub stash {
         }
     }
     
+    $self->write;
     return $self->{stash};
 }
 
@@ -100,6 +107,8 @@ The write method is used to write the specified session file.
 sub write {
     my  $self = shift;
     my  $file = shift || $self->{file};
+    
+    $self->{file} = $file;
     
     if ($file) {
         # write session file

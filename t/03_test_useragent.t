@@ -3,40 +3,43 @@
 use Test::More tests => 26;
 
 use Scrappy;
-my  $scraper = Scrappy->new;
+my  $scrappy = Scrappy->new;
+my  $useragent = $scrappy->user_agent;
+
+# scraper object
+ok  'Scrappy::Scraper::UserAgent' eq ref $useragent;
 
 # test user-agent in general
-ok $scraper->user_agent('My-User-Agent');
-ok $scraper->user_agent eq 'My-User-Agent';
-ok 'My-User-Agent' eq $scraper->mech->agent;
+ok $useragent->name('My-User-Agent');
+ok $useragent->name eq 'My-User-Agent';
 
 # test random user-agent method
-ok $scraper->random_user_agent;
-ok $scraper->random_user_agent('any');
-ok $scraper->random_user_agent('chrome');
-ok $scraper->random_user_agent('explorer');
-ok $scraper->random_user_agent('opera');
-ok $scraper->random_user_agent('safari');
-ok $scraper->random_user_agent('firefox');
+ok $useragent->random_user_agent;
+ok $useragent->random_user_agent('any');
+ok $useragent->random_user_agent('chrome');
+ok $useragent->random_user_agent('explorer');
+ok $useragent->random_user_agent('opera');
+ok $useragent->random_user_agent('safari');
+ok $useragent->random_user_agent('firefox');
 
 # test random user-agent for linux
-ok $scraper->random_user_agent('chrome', 'linux') =~ /Linux/;
-ok $scraper->random_user_agent('explorer', 'linux') =~ /Linux/;
-ok $scraper->random_user_agent('opera', 'linux') =~ /Linux/;
-ok $scraper->random_user_agent('safari', 'linux') =~ /Linux/;
-ok $scraper->random_user_agent('firefox', 'linux') =~ /Linux/;
+ok $useragent->random_user_agent('chrome', 'linux') =~ /Linux/;
+ok ! $useragent->random_user_agent('explorer', 'linux'); # should fail, linux deosnt support explorer silly :P
+ok $useragent->random_user_agent('opera', 'linux') =~ /Linux/;
+ok $useragent->random_user_agent('safari', 'linux') =~ /Linux/;
+ok $useragent->random_user_agent('firefox', 'linux') =~ /Linux/;
 
 # test random user-agent for windows
-ok $scraper->random_user_agent('chrome', 'windows') =~ /Windows/;
-ok $scraper->random_user_agent('explorer', 'windows') =~ /Windows/;
-ok $scraper->random_user_agent('opera', 'windows') =~ /Windows/;
-ok $scraper->random_user_agent('safari', 'windows') =~ /Windows/;
-ok $scraper->random_user_agent('firefox', 'windows') =~ /Windows/;
+ok $useragent->random_user_agent('chrome', 'windows') =~ /Windows/;
+ok $useragent->random_user_agent('explorer', 'windows') =~ /Windows/;
+ok $useragent->random_user_agent('opera', 'windows') =~ /Windows/;
+ok $useragent->random_user_agent('safari', 'windows') =~ /Windows/;
+ok $useragent->random_user_agent('firefox', 'windows') =~ /Windows/;
 
 # test random user-agent for macintosh
-ok $scraper->random_user_agent('chrome', 'macintosh') =~ /Mac/;
-ok $scraper->random_user_agent('explorer', 'macintosh') =~ /Mac/;
-ok $scraper->random_user_agent('opera', 'macintosh') =~ /Mac/;
-ok $scraper->random_user_agent('safari', 'macintosh') =~ /Mac/;
-ok $scraper->random_user_agent('firefox', 'macintosh') =~ /Mac/;
-ok $scraper->user_agent =~ /Mac/;
+ok $useragent->random_user_agent('chrome', 'macintosh') =~ /Mac/;
+ok $useragent->random_user_agent('explorer', 'macintosh') =~ /Mac/;
+ok $useragent->random_user_agent('opera', 'macintosh') =~ /Mac/;
+ok $useragent->random_user_agent('safari', 'macintosh') =~ /Mac/;
+ok $useragent->random_user_agent('firefox', 'macintosh') =~ /Mac/;
+ok $useragent->name =~ /Mac/;
