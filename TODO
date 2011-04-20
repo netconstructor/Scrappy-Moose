@@ -1,7 +1,4 @@
 # WISHLIST
-  -   support all CSS3 selectors
-  -   support constraints (content-type, size, etc)
-  -   add serializer support (json, yaml, xml)
   -   add plugin system
   -   use HTML::Zoom to update html page content
   -   use HTML::Scrubber to strip unwanted content
