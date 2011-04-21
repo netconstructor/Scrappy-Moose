@@ -1,5 +1,5 @@
 # ABSTRACT: Scrappy Event Logging Mechanism
-
+# Dist::Zilla: +PodWeaver
 package Scrappy::Logger;
 
 # load OO System
@@ -10,9 +10,9 @@ use Carp;
 use DateTime;
 use DateTime::Format::SQLite;
 use YAML::Syck;
-    $YAML::Syck::ImplicitTyping = 1;
-    
-has verbose => ( is => 'rw', isa => 'Int', default => 0 );
+$YAML::Syck::ImplicitTyping = 1;
+
+has verbose => (is => 'rw', isa => 'Int', default => 0);
 
 =head1 SYNOPSIS
 
@@ -44,18 +44,18 @@ The load method is used to read the specified log file.
 =cut
 
 sub load {
-    my  $self = shift;
-    my  $file = shift;
-    
+    my $self = shift;
+    my $file = shift;
+
     if ($file) {
-        
-        $self->{file}  = $file;
-        
+
+        $self->{file} = $file;
+
         # load session file
         $self->{stash} = LoadFile($file)
-            or croak("Log file $file does not exist or is not read/writable");
+          or croak("Log file $file does not exist or is not read/writable");
     }
-    
+
     return $self->{stash};
 }
 
@@ -75,13 +75,17 @@ use with event logging.
 sub timestamp {
     my $self = shift;
     my $date = shift;
-    
+
     if ($date) {
+
         # $date =~ s/\_/ /g;
-        return DateTime::Format::SQLite->parse_datetime($date); # datetime object
+        return DateTime::Format::SQLite->parse_datetime($date)
+          ;    # datetime object
     }
     else {
-        $date = DateTime::Format::SQLite->format_datetime(DateTime->now); # string
+        $date =
+          DateTime::Format::SQLite->format_datetime(DateTime->now);    # string
+
         # $date =~ s/ /_/g;
         return $date;
     }
@@ -141,45 +145,51 @@ The event method is used to log an event to the event log.
 =cut
 
 sub event {
-    my  $self = shift;
-    my  $type = shift;
-    my  $note = shift;
-    
+    my $self = shift;
+    my $type = shift;
+    my $note = shift;
+
     croak("Can't record an event without an event-type and notation")
-        unless $type && $note;
-        
+      unless $type && $note;
+
     $self->{stash} = {} unless defined $self->{stash};
-        
+
     $self->{stash}->{$type} = [] unless defined $self->{stash}->{$type};
-    
-    my  $frame = $type eq 'info' || $type eq 'error' || $type eq 'warn' ? 1 : 0;
-    my  @trace = caller($frame);
-    my  $entry = scalar @{$self->{stash}->{$type}};
-    my  $data  = {};
-        $data  = {
-            '// package'  => $trace[0],
-            '// filename' => $trace[1],
-            '// line'     => $trace[2]
-        } if $self->verbose;
-    
-        $self->{stash}->{$type}->[$entry] = {
-            occurred => $self->timestamp,
-            notation => $note
-        } unless defined $self->{stash}->{$type}->[$entry];
-        
-        $self->{stash}->{$type}->[$entry]->{metadata} = $data if scalar keys %{$data};
-    
+
+    my $frame = $type eq 'info' || $type eq 'error' || $type eq 'warn' ? 1 : 0;
+    my @trace = caller($frame);
+    my $entry = scalar @{$self->{stash}->{$type}};
+    my $time  = $self->timestamp;
+    my $data  = {};
+    $data = {
+        '// package'  => $trace[0],
+        '// filename' => $trace[1],
+        '// line'     => $trace[2]
+      }
+      if $self->verbose;
+
+    $self->{stash}->{$type}->[$entry] = {
+        occurred => $time,
+        notation => $note,
+        eventlog => "[$time] [$type] $note"
+      }
+      unless defined $self->{stash}->{$type}->[$entry];
+
+    $self->{stash}->{$type}->[$entry]->{metadata} = $data
+      if scalar keys %{$data};
+
     if (@_) {
-        my  $stash = @_ > 1 ? {@_} : $_[0];
-        if($stash) {
+        my $stash = @_ > 1 ? {@_} : $_[0];
+        if ($stash) {
             if (ref $stash eq 'HASH') {
                 for (keys %{$stash}) {
-                    $self->{stash}->{$type}->[$entry]->{metadata}->{$_} = $stash->{$_};
+                    $self->{stash}->{$type}->[$entry]->{metadata}->{$_} =
+                      $stash->{$_};
                 }
             }
         }
     }
-    
+
     $self->write;
     return $self->{stash}->{$type}->[$entry];
 }
@@ -196,17 +206,19 @@ when events are recorded.
 =cut
 
 sub write {
-    my  $self = shift;
-    my  $file = shift || $self->{file};
-    
+    my $self = shift;
+    my $file = shift || $self->{file};
+
     $self->{file} = $file;
-    
+
     if ($file) {
+
         # write session file
         DumpFile($file, $self->{stash})
-            or croak("Session file $file does not exist or is not read/writable");
+          or
+          croak("Session file $file does not exist or is not read/writable");
     }
-    
+
     return $self->{stash};
 }
 

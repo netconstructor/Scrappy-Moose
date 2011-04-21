@@ -1,5 +1,5 @@
 # ABSTRACT: Scrappy Session Storage Mechanism
-
+# Dist::Zilla: +PodWeaver
 package Scrappy::Session;
 
 # load OO System
@@ -8,7 +8,7 @@ use Moose;
 # load other libraries
 use Carp;
 use YAML::Syck;
-    $YAML::Syck::ImplicitTyping = 1;
+$YAML::Syck::ImplicitTyping = 1;
 
 =head1 SYNOPSIS
 
@@ -37,18 +37,19 @@ The load method is used to read the specified session file.
 =cut
 
 sub load {
-    my  $self = shift;
-    my  $file = shift;
-    
+    my $self = shift;
+    my $file = shift;
+
     if ($file) {
-        
-        $self->{file}  = $file;
-        
+
+        $self->{file} = $file;
+
         # load session file
         $self->{stash} = LoadFile($file)
-            or croak("Session file $file does not exist or is not read/writable");
+          or
+          croak("Session file $file does not exist or is not read/writable");
     }
-    
+
     return $self->{stash};
 }
 
@@ -69,19 +70,19 @@ stash object.
 =cut
 
 sub stash {
-    my  $self = shift;
-        $self->{stash} = {} unless defined $self->{stash};
-    
+    my $self = shift;
+    $self->{stash} = {} unless defined $self->{stash};
+
     if (@_) {
-        my  $stash = @_ > 1 ? {@_} : $_[0];
-        if($stash) {
+        my $stash = @_ > 1 ? {@_} : $_[0];
+        if ($stash) {
             if (ref $stash eq 'HASH') {
                 for (keys %{$stash}) {
                     if (lc $_ ne ':file') {
                         $self->{stash}->{$_} = $stash->{$_};
                     }
                     else {
-                        $self->{file}  = $stash->{$_};
+                        $self->{file} = $stash->{$_};
                     }
                 }
             }
@@ -90,7 +91,7 @@ sub stash {
             }
         }
     }
-    
+
     $self->write;
     return $self->{stash};
 }
@@ -105,17 +106,19 @@ The write method is used to write the specified session file.
 =cut
 
 sub write {
-    my  $self = shift;
-    my  $file = shift || $self->{file};
-    
+    my $self = shift;
+    my $file = shift || $self->{file};
+
     $self->{file} = $file;
-    
+
     if ($file) {
+
         # write session file
         DumpFile($file, $self->{stash})
-            or croak("Session file $file does not exist or is not read/writable");
+          or
+          croak("Session file $file does not exist or is not read/writable");
     }
-    
+
     return $self->{stash};
 }
 

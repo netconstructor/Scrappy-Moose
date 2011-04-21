@@ -12,7 +12,7 @@ has 'worker' => (
     is      => 'ro',
     isa     => 'Web::Scraper',
     default => sub {
-        scraper(sub{})
+        scraper(sub { });
     }
 );
 
@@ -20,7 +20,7 @@ has 'worker' => (
 has html => (is => 'rw', isa => 'Any');
 
 # data attribute
-has data => (is => 'rw', isa => 'ArrayRef', default => sub {[]});
+has data => (is => 'rw', isa => 'ArrayRef', default => sub { [] });
 
 # html-tags attribute
 has 'html_tags' => (
@@ -154,43 +154,43 @@ has 'html_tags' => (
 );
 
 sub focus {
-    my $self  = shift;
+    my $self = shift;
     my $index = shift || 0;
-    
+
     $self->is_html;
-    
+
     $self->html($self->data->[$index]->{html});
     return $self;
 }
 
 sub scrape {
     my ($self, $selector) = @_;
-    
+
     $self->is_html;
-    
+
     $self->select($selector);
     return $self->data;
 }
 
 sub select {
     my ($self, $selector) = @_;
-    
+
     $self->is_html;
-    
+
     $self->worker->{code} = scraper {
-        process ($selector, "data[]", $self->html_tags)
+        process($selector, "data[]", $self->html_tags);
     };
-    
+
     my $scraper = $self->worker->{code};
-    
-    $self->data( $scraper->scrape( $self->html )->{data} || [] );
+
+    $self->data($scraper->scrape($self->html)->{data} || []);
     return $self;
 }
 
 sub is_html {
     my $self = shift;
     croak("Can't parse HTML document without providing a valid source")
-        unless $self->html;
+      unless $self->html;
 }
 
 1;

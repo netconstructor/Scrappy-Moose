@@ -1,5 +1,5 @@
 # ABSTRACT: Scrappy Request Scheduler and Queue System
-
+# Dist::Zilla: +PodWeaver
 package Scrappy::Queue;
 
 # load OO System
@@ -59,7 +59,7 @@ The add method is used to add URLs to the queue.
 sub add {
     my $self = shift;
     my @urls = @_;
-    
+
     # validate and formulate proper URLs
     for (my $i = 0; $i < @urls; $i++) {
         my $u = URI->new($urls[$i]);
@@ -72,7 +72,7 @@ sub add {
             }
         }
     }
-    
+
     push @_queue, @urls;
     return $self;
 }
@@ -88,10 +88,10 @@ The clear method empties the URLs queue and resets the queue cursor.
 
 sub clear {
     my $self = shift;
-    
-    @_queue = ();
+
+    @_queue  = ();
     $_cursor = -1;
-    
+
     return $self;
 }
 
@@ -108,9 +108,9 @@ The reset method resets the queue cursor only.
 
 sub reset {
     my $self = shift;
-    
+
     $_cursor = -1;
-    
+
     return $self;
 }
 
@@ -125,7 +125,7 @@ The current method returns the value of the current position in the queue.
 
 sub current {
     my $self = shift;
-    
+
     return $_queue[$_cursor];
 }
 
@@ -140,7 +140,7 @@ The next method returns the next value from the current position of the queue.
 
 sub next {
     my $self = shift;
-    
+
     return $_queue[++$_cursor];
 }
 
@@ -155,7 +155,7 @@ The previous method returns the previous value from the current position in the 
 
 sub previous {
     my $self = shift;
-    
+
     return $_queue[--$_cursor];
 }
 
@@ -171,7 +171,7 @@ The first method returns the first value in the queue.
 sub first {
     my $self = shift;
     $_cursor = 0;
-    
+
     return $_queue[$_cursor];
 }
 
@@ -187,7 +187,7 @@ The last method returns the last value in the queue.
 sub last {
     my $self = shift;
     $_cursor = scalar(@_queue) - 1;
-    
+
     return $_queue[$_cursor];
 }
 
@@ -204,7 +204,7 @@ The index method returns the value of the specified position in the queue.
 sub index {
     my $self = shift;
     $_cursor = shift || 0;
-    
+
     return $_queue[$_cursor];
 }
 

@@ -3,8 +3,8 @@ package Scrappy::Scraper::Control;
 # load OO System
 use Moose;
 
-has 'allowed'    => ( is => 'rw', isa => 'HashRef[Int]', default => sub {{}});
-has 'restricted' => ( is => 'rw', isa => 'HashRef[Int]', default => sub {{}});
+has 'allowed'    => (is => 'rw', isa => 'HashRef[Int]', default => sub { {} });
+has 'restricted' => (is => 'rw', isa => 'HashRef[Int]', default => sub { {} });
 
 sub allow {
     my ($self, @domains) = @_;
@@ -30,10 +30,10 @@ sub restrict {
 
 sub is_allowed {
     my ($self, $domain) = @_;
-    
+
     # empty domain not allowed
     return 0 unless $domain;
-    
+
     # is anything explicitly allowed, if so everything is restrcited unless
     # explicitly defined in allowed
     if ('HASH' eq ref $self->allowed) {
@@ -41,14 +41,14 @@ sub is_allowed {
             return $self->allowed->{$domain} ? 1 : 0;
         }
     }
-    
+
     # is it explicitly restricted
     if ('HASH' eq ref $self->restricted) {
         if (keys %{$self->restricted}) {
             return 0 if $self->restricted->{$domain};
         }
     }
-    
+
     # i guess its cool
     return 1;
 }

@@ -1,5 +1,5 @@
 # ABSTRACT: Scrappy Web Scraper
-
+# Dist::Zilla: +PodWeaver
 package Scrappy::Scraper;
 
 # load OO System
@@ -18,10 +18,10 @@ use Web::Scraper;
 use WWW::Mechanize;
 
 # debug attribute
-has 'debug' => ( is => 'rw', isa => 'Bool', default => 1 );
+has 'debug' => (is => 'rw', isa => 'Bool', default => 1);
 
 # html attribute
-has 'html' => ( is => 'rw', isa => 'Any' );
+has 'html' => (is => 'rw', isa => 'Any');
 
 # access control object
 has 'control' => (
@@ -43,11 +43,11 @@ has 'logger' => (
 
 # parser object
 has 'parser' => (
-   is      => 'ro',
-   isa     => 'Scrappy::Scraper::Parser',
-   default => sub {
-       Scrappy::Scraper::Parser->new;
-   }
+    is      => 'ro',
+    isa     => 'Scrappy::Scraper::Parser',
+    default => sub {
+        Scrappy::Scraper::Parser->new;
+    }
 );
 
 # queue object
@@ -128,44 +128,48 @@ returns the previous page (response), it will not backtrack beyond the first req
 
 sub back {
     my $self = shift;
-    
+
     # specify user-agent
     $self->worker->add_header("User-Agent" => $self->user_agent->name)
-        if defined $self->user_agent->name;
-    
+      if defined $self->user_agent->name;
+
     # set html response
-    $self->html( $self->worker->back );
-    
-    $self->log("info", "Navigated back to ".$self->page." successfully");
-    
+    $self->html($self->worker->back);
+
+    $self->log("info", "Navigated back to " . $self->page . " successfully");
+
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $self->page;
-    $self->worker->{cookie_jar}->scan(sub{
-        
-        my ($version,   $key,    $val,     $path,    $domain, $port,
-            $path_spec, $secure, $expires, $discard, $hash) = @_;
-        
-        $self->session->stash('cookies' => {})
-          unless defined $self->session->stash('cookies');
-          
-        $self->session->stash->{'cookies'}->{$domain}->{$key} = {
-            version   => $version,
-            key       => $key,
-            val       => $val,
-            path      => $path,
-            domain    => $domain,
-            port      => $port,
-            path_spec => $path_spec,
-            secure    => $secure,
-            expires   => $expires,
-            discard   => $discard,
-            hash      => $hash
-        };
-        
-        $self->session->write;
-        
-    });
-    
+    $self->worker->{cookie_jar}->scan(
+        sub {
+
+            my ($version, $key,     $val,       $path,
+                $domain,  $port,    $path_spec, $secure,
+                $expires, $discard, $hash
+            ) = @_;
+
+            $self->session->stash('cookies' => {})
+              unless defined $self->session->stash('cookies');
+
+            $self->session->stash->{'cookies'}->{$domain}->{$key} = {
+                version   => $version,
+                key       => $key,
+                val       => $val,
+                path      => $path,
+                domain    => $domain,
+                port      => $port,
+                path_spec => $path_spec,
+                secure    => $secure,
+                expires   => $expires,
+                discard   => $discard,
+                hash      => $hash
+            };
+
+            $self->session->write;
+
+        }
+    );
+
     return $self;
 }
 
@@ -221,54 +225,63 @@ the originating page.
 sub download {
     my $self = shift;
     my ($url, $dir, $file) = @_;
-    
-        $url = URI->new(@_);
-    
+
+    $url = URI->new(@_);
+
     # access control
     unless ($self->control->is_allowed($url)) {
         $self->log("warn", "$url was not fetched, the url is prohibited");
         return 0;
     }
-    
+
     # specify user-agent
     $self->worker->add_header("User-Agent" => $self->user_agent->name)
-        if defined $self->user_agent->name;
-    
+      if defined $self->user_agent->name;
+
     # set html response
     $dir =~ s/[\\\/]+$//;
-     if (@_ == 3) {
+    if (@_ == 3) {
         $self->get($url);
         $self->store($dir . '/' . $file);
-        $self->log("info", "$url was downloaded to ". $dir . '/' . $file ." successfully");
+        $self->log("info",
+            "$url was downloaded to " . $dir . '/' . $file . " successfully");
         $self->back;
     }
-    elsif(@_ == 2) {
+    elsif (@_ == 2) {
         $self->get($url);
-        my @chars = ('a'..'z', 'A'..'Z', 0..9);
+        my @chars = ('a' .. 'z', 'A' .. 'Z', 0 .. 9);
         my $filename = $self->worker->response->filename;
-           $filename = $chars[rand(@chars)] . $chars[rand(@chars)] .
-                       $chars[rand(@chars)] . $chars[rand(@chars)] .
-                       $chars[rand(@chars)] . $chars[rand(@chars)]
-                       unless $filename;
+        $filename =
+            $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          unless $filename;
         $self->store($dir . '/' . $filename);
-        $self->log("info", "$url was downloaded to ". $dir . '/' . $filename ." successfully");
+        $self->log("info",
+                "$url was downloaded to " 
+              . $dir . '/'
+              . $filename
+              . " successfully");
         $self->back;
     }
     else {
-        croak("To download data from a URI you must supply at least a valid URI " .
-            "and download directory path");
+        croak(
+            "To download data from a URI you must supply at least a valid URI "
+              . "and download directory path");
     }
-    
+
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $url;
-    
+
     $self->worker->{params} = {};
-    $self->worker->{params} = {
-        map { ( $_ => $url->query_form($_) ) } $url->query_form
-    };
-    
+    $self->worker->{params} =
+      {map { ($_ => $url->query_form($_)) } $url->query_form};
+
     sleep $self->pause;
-    
+
     return $self;
 }
 
@@ -295,60 +308,63 @@ The form method is used to submit a form.
 sub form {
     my $self = shift;
     my $url  = $self->page;
-    
+
     # TODO: need to figure out how to determine the form action before submit
-    
+
     # access control
     #unless ($self->control->is_allowed($url)) {
     #    $self->log("warn", "$url was not fetched, the url is prohibited");
     #    return 0;
     #}
-    
+
     # specify user-agent
     $self->worker->add_header("User-Agent" => $self->user_agent->name)
-        if defined $self->user_agent->name;
-    
+      if defined $self->user_agent->name;
+
     # set html response
     $self->html($self->worker->submit_form(@_));
-    
+
     $self->log("info", "form posted from $url successfully", @_);
-    
+
     #$self->stash->{history} = [] unless defined $self->stash->{history};
     #push @{$self->stash->{history}}, $url;
-    
-    $self->worker->{cookie_jar}->scan(sub{
-        
-        my ($version,   $key,    $val,     $path,    $domain, $port,
-            $path_spec, $secure, $expires, $discard, $hash) = @_;
-        
-        $self->session->stash('cookies' => {})
-          unless defined $self->session->stash('cookies');
-          
-        $self->session->stash->{'cookies'}->{$domain}->{$key} = {
-            version   => $version,
-            key       => $key,
-            val       => $val,
-            path      => $path,
-            domain    => $domain,
-            port      => $port,
-            path_spec => $path_spec,
-            secure    => $secure,
-            expires   => $expires,
-            discard   => $discard,
-            hash      => $hash
-        };
-        
-        $self->session->write;
-        
-    });
-    
+
+    $self->worker->{cookie_jar}->scan(
+        sub {
+
+            my ($version, $key,     $val,       $path,
+                $domain,  $port,    $path_spec, $secure,
+                $expires, $discard, $hash
+            ) = @_;
+
+            $self->session->stash('cookies' => {})
+              unless defined $self->session->stash('cookies');
+
+            $self->session->stash->{'cookies'}->{$domain}->{$key} = {
+                version   => $version,
+                key       => $key,
+                val       => $val,
+                path      => $path,
+                domain    => $domain,
+                port      => $port,
+                path_spec => $path_spec,
+                secure    => $secure,
+                expires   => $expires,
+                discard   => $discard,
+                hash      => $hash
+            };
+
+            $self->session->write;
+
+        }
+    );
+
     $self->worker->{params} = {};
-    $self->worker->{params} = {
-        map { ( $_ => $url->query_form($_) ) } $url->query_form
-    };
-    
+    $self->worker->{params} =
+      {map { ($_ => $url->query_form($_)) } $url->query_form};
+
     sleep $self->pause;
-    
+
     return $self;
 }
 
@@ -364,56 +380,59 @@ The get method takes a URL or URI and returns an HTTP::Response object.
 sub get {
     my $self = shift;
     my $url  = URI->new(@_);
-    
+
     # access control
     unless ($self->control->is_allowed($url)) {
         $self->log("warn", "$url was not fetched, the url is prohibited");
         return 0;
     }
-    
+
     # specify user-agent
     $self->worker->add_header("User-Agent" => $self->user_agent->name)
-        if defined $self->user_agent->name;
-    
+      if defined $self->user_agent->name;
+
     # set html response
-    $self->html( $self->worker->get($url) );
+    $self->html($self->worker->get($url));
     $self->log("info", "$url was fetched successfully");
-    
+
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $url;
-    $self->worker->{cookie_jar}->scan(sub{
-        
-        my ($version,   $key,    $val,     $path,    $domain, $port,
-            $path_spec, $secure, $expires, $discard, $hash) = @_;
-        
-        $self->session->stash('cookies' => {})
-          unless defined $self->session->stash('cookies');
-          
-        $self->session->stash->{'cookies'}->{$domain}->{$key} = {
-            version   => $version,
-            key       => $key,
-            val       => $val,
-            path      => $path,
-            domain    => $domain,
-            port      => $port,
-            path_spec => $path_spec,
-            secure    => $secure,
-            expires   => $expires,
-            discard   => $discard,
-            hash      => $hash
-        };
-        
-        $self->session->write;
-        
-    });
-    
+    $self->worker->{cookie_jar}->scan(
+        sub {
+
+            my ($version, $key,     $val,       $path,
+                $domain,  $port,    $path_spec, $secure,
+                $expires, $discard, $hash
+            ) = @_;
+
+            $self->session->stash('cookies' => {})
+              unless defined $self->session->stash('cookies');
+
+            $self->session->stash->{'cookies'}->{$domain}->{$key} = {
+                version   => $version,
+                key       => $key,
+                val       => $val,
+                path      => $path,
+                domain    => $domain,
+                port      => $port,
+                path_spec => $path_spec,
+                secure    => $secure,
+                expires   => $expires,
+                discard   => $discard,
+                hash      => $hash
+            };
+
+            $self->session->write;
+
+        }
+    );
+
     $self->worker->{params} = {};
-    $self->worker->{params} = {
-        map { ( $_ => $url->query_form($_) ) } $url->query_form
-    };
-    
+    $self->worker->{params} =
+      {map { ($_ => $url->query_form($_)) } $url->query_form};
+
     sleep $self->pause;
-    
+
     return $self;
 }
 
@@ -522,31 +541,32 @@ framework processes URL routes.
 sub page_match {
     my $self    = shift;
     my $pattern = shift;
-    my $url     = shift || $self->page; $url = URI->new($url);
+    my $url     = shift || $self->page;
+    $url = URI->new($url);
     my $options = shift || {};
-    
+
     croak("route can't be defined without a valid URL pattern")
-        unless $pattern;
-    
+      unless $pattern;
+
     my $route = $self->stash->{patterns}->{$pattern};
-    
+
     # does route definition already exist?
     unless (keys %{$route}) {
-            
+
         $route->{on_match} = $options->{on_match};
-        
+
         # define options
-        if ( my $host = $options->{host} ) {
+        if (my $host = $options->{host}) {
             $route->{host} = $host;
             $route->{host_re} = ref $host ? $host : qr(^\Q$host\E$);
         }
-    
+
         $route->{pattern} = $pattern;
-    
+
         # compile pattern
         my @capture;
         $route->{pattern_re} = do {
-            if ( ref $pattern ) {
+            if (ref $pattern) {
                 $route->{_regexp_capture} = 1;
                 $pattern;
             }
@@ -574,45 +594,48 @@ sub page_match {
                 qr{^$pattern$};
             }
         };
-        $route->{capture} = \@capture;    
+        $route->{capture} = \@capture;
         $self->stash->{patterns}->{$route->{pattern}} = $route;
     }
-    
+
     # match
-    if ( $route->{host_re} ) {
-        unless ( $url->host =~ $route->{host_re} ) {
-            return undef;
+    if ($route->{host_re}) {
+        unless ($url->host =~ $route->{host_re}) {
+            return 0;
         }
     }
-    
-    if ( my @captured = ( $url->path =~ $route->{pattern_re} ) ) {
+
+    if (my @captured = ($url->path =~ $route->{pattern_re})) {
         my %args;
         my @splat;
-        if ( $route->{_regexp_capture} ) {
+        if ($route->{_regexp_capture}) {
             push @splat, @captured;
         }
         else {
-            for my $i ( 0 .. @{ $route->{capture} } - 1 ) {
-                if ( $route->{capture}->[$i] eq '__splat__' ) {
+            for my $i (0 .. @{$route->{capture}} - 1) {
+                if ($route->{capture}->[$i] eq '__splat__') {
                     push @splat, $captured[$i];
                 }
                 else {
-                    $args{ $route->{capture}->[$i] } = $captured[$i];
+                    $args{$route->{capture}->[$i]} = $captured[$i];
                 }
             }
         }
-        my $match =
-          +{ ( label => $route->{label} ), %args, ( @splat ? ( splat => \@splat ) : () ) };
-        if ( $route->{on_match} ) {
-            my $ret = $route->{on_match}->( $self, $match );
-            return undef unless $ret;
+        my $match = +{
+            (label => $route->{label}),
+            %args,
+            (@splat ? (splat => \@splat) : ())
+        };
+        if ($route->{on_match}) {
+            my $ret = $route->{on_match}->($self, $match);
+            return 0 unless $ret;
         }
-        $match->{params} = { %args };
+        $match->{params} = {%args};
         $match->{params}->{splat} = \@splat if @splat;
         return $match;
     }
-    
-    return undef;
+
+    return 0;
 }
 
 =method page_reload
@@ -624,46 +647,50 @@ repeats the current request.
 
 sub page_reload {
     my $self = shift;
-    
+
     # specify user-agent
     $self->worker->add_header("User-Agent" => $self->user_agent->name)
-        if defined $self->user_agent->name;
-    
+      if defined $self->user_agent->name;
+
     # set html response
     $self->html($self->worker->reload);
-    
+
     $self->log("info", "page reload successful");
-    
-    my  $url = $self->page;
-    
+
+    my $url = $self->page;
+
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $url;
-    $self->worker->{cookie_jar}->scan(sub{
-        
-        my ($version,   $key,    $val,     $path,    $domain, $port,
-            $path_spec, $secure, $expires, $discard, $hash) = @_;
-        
-        $self->session->stash('cookies' => {})
-          unless defined $self->session->stash('cookies');
-          
-        $self->session->stash->{'cookies'}->{$domain}->{$key} = {
-            version   => $version,
-            key       => $key,
-            val       => $val,
-            path      => $path,
-            domain    => $domain,
-            port      => $port,
-            path_spec => $path_spec,
-            secure    => $secure,
-            expires   => $expires,
-            discard   => $discard,
-            hash      => $hash
-        };
-        
-        $self->session->write;
-        
-    });
-    
+    $self->worker->{cookie_jar}->scan(
+        sub {
+
+            my ($version, $key,     $val,       $path,
+                $domain,  $port,    $path_spec, $secure,
+                $expires, $discard, $hash
+            ) = @_;
+
+            $self->session->stash('cookies' => {})
+              unless defined $self->session->stash('cookies');
+
+            $self->session->stash->{'cookies'}->{$domain}->{$key} = {
+                version   => $version,
+                key       => $key,
+                val       => $val,
+                path      => $path,
+                domain    => $domain,
+                port      => $port,
+                path_spec => $path_spec,
+                secure    => $secure,
+                expires   => $expires,
+                discard   => $discard,
+                hash      => $hash
+            };
+
+            $self->session->write;
+
+        }
+    );
+
     return $self;
 }
 
@@ -692,7 +719,7 @@ all HTML markup stripped.
 =cut
 
 sub page_text {
-    return shift->page_data( format => 'text');
+    return shift->page_data(format => 'text');
 }
 
 =method page_title
@@ -733,58 +760,61 @@ application/x-www-form-urlencoded and multipart/form-data.
 
 sub post {
     my $self = shift;
-    my $url = $_[0];
-    
+    my $url  = $_[0];
+
     # access control
     unless ($self->control->is_allowed($url)) {
         $self->log("warn", "$url was not fetched, the url is prohibited");
         return 0;
     }
-    
+
     # specify user-agent
     $self->worker->add_header("User-Agent" => $self->user_agent->name)
-        if defined $self->user_agent->name;
-    
+      if defined $self->user_agent->name;
+
     # set html response
     $self->html($self->worker->post(@_));
-    
+
     $self->log("info", "posted data to $_[0] successfully", @_);
-    
+
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $url;
-    $self->worker->{cookie_jar}->scan(sub{
-        
-        my ($version,   $key,    $val,     $path,    $domain, $port,
-            $path_spec, $secure, $expires, $discard, $hash) = @_;
-        
-        $self->session->stash('cookies' => {})
-          unless defined $self->session->stash('cookies');
-          
-        $self->session->stash->{'cookies'}->{$domain}->{$key} = {
-            version   => $version,
-            key       => $key,
-            val       => $val,
-            path      => $path,
-            domain    => $domain,
-            port      => $port,
-            path_spec => $path_spec,
-            secure    => $secure,
-            expires   => $expires,
-            discard   => $discard,
-            hash      => $hash
-        };
-        
-        $self->session->write;
-        
-    });
-    
+    $self->worker->{cookie_jar}->scan(
+        sub {
+
+            my ($version, $key,     $val,       $path,
+                $domain,  $port,    $path_spec, $secure,
+                $expires, $discard, $hash
+            ) = @_;
+
+            $self->session->stash('cookies' => {})
+              unless defined $self->session->stash('cookies');
+
+            $self->session->stash->{'cookies'}->{$domain}->{$key} = {
+                version   => $version,
+                key       => $key,
+                val       => $val,
+                path      => $path,
+                domain    => $domain,
+                port      => $port,
+                path_spec => $path_spec,
+                secure    => $secure,
+                expires   => $expires,
+                discard   => $discard,
+                hash      => $hash
+            };
+
+            $self->session->write;
+
+        }
+    );
+
     $self->worker->{params} = {};
-    $self->worker->{params} = {
-        map { ( $_ => $url->query_form($_) ) } $url->query_form
-    };
-    
+    $self->worker->{params} =
+      {map { ($_ => $url->query_form($_)) } $url->query_form};
+
     sleep $self->pause;
-    
+
     return $self;
 }
 
@@ -821,11 +851,12 @@ when using proxy.
 =cut
 
 sub proxy {
-    my $self = shift;
-    my $proxy = pop @_;
+    my $self     = shift;
+    my $proxy    = pop @_;
     my @protocol = @_;
     $self->worker->proxy([@protocol], $proxy);
-    $self->log("info", "Set proxy $proxy using protocol(s) " . join ' and ', @protocol);
+    $self->log("info", "Set proxy $proxy using protocol(s) " . join ' and ',
+        @protocol);
     return $self;
 }
 
@@ -849,7 +880,7 @@ return boolean, 1 if the current page doesn't match the requested page.
 =cut
 
 sub request_denied {
-    my $self   = shift;
+    my $self = shift;
     my ($last) = reverse @{$self->stash->{history}};
     return 1 if ($self->page ne $last);
 }
@@ -887,7 +918,7 @@ with the matching elements.
 
 sub select {
     my ($self, $selector) = @_;
-    my  $parser = Scrappy::Scraper::Parser->new;
+    my $parser = Scrappy::Scraper::Parser->new;
     $parser->html($self->html);
     return $parser->select($selector);
 }
@@ -913,7 +944,7 @@ sub log {
     my $self = shift;
     my $type = shift;
     my @args = @_;
-    
+
     if ($self->debug) {
         if ($type eq 'info') {
             $self->logger->info(@args);
@@ -928,7 +959,7 @@ sub log {
             warn $type;
             $self->logger->event($type, @args);
         }
-        
+
         return 1;
     }
     else {
@@ -970,7 +1001,7 @@ sub pause {
     my $self = shift;
     if (defined $_[0]) {
         if ($_[1]) {
-            my @range = (($_[0] < $_[1] ? $_[0] : 0)..$_[1]);
+            my @range = (($_[0] < $_[1] ? $_[0] : 0) .. $_[1]);
             $self->worker->{pause_range} = [$_[0], $_[1]];
             $self->worker->{pause} = $range[rand(@range)];
         }
@@ -981,15 +1012,15 @@ sub pause {
     }
     else {
         my $interval = $self->worker->{pause} || 0;
-        
+
         # select the next random pause value from the range
         if (defined $self->worker->{pause_range}) {
-            my @range = @{ $self->worker->{pause_range} };
+            my @range = @{$self->worker->{pause_range}};
             $self->pause(@range) if @range == 2;
         }
-        
+
         $self->log("info", "processing was halted for $interval seconds")
-            if $interval > 0;
+          if $interval > 0;
         return $interval;
     }
 }
@@ -1021,12 +1052,12 @@ stash object.
 =cut
 
 sub stash {
-    my  $self = shift;
-        $self->{stash} = {} unless defined $self->{stash};
-    
+    my $self = shift;
+    $self->{stash} = {} unless defined $self->{stash};
+
     if (@_) {
-        my  $stash = @_ > 1 ? {@_} : $_[0];
-        if($stash) {
+        my $stash = @_ > 1 ? {@_} : $_[0];
+        if ($stash) {
             if (ref $stash eq 'HASH') {
                 $self->{stash}->{$_} = $stash->{$_} for keys %{$stash};
             }
@@ -1035,7 +1066,7 @@ sub stash {
             }
         }
     }
-    
+
     return $self->{stash};
 }
 
