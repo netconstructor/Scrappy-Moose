@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# Simple spider crawling CPAN
 
 use Scrappy; # new and improve ... with Moose and other styling gel
 

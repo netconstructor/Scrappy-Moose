@@ -1,0 +1,185 @@
+--- 
+info: 
+  - 
+    eventlog: "[2011-04-22 13:33:45] [info] http://www.hidemyass.com/proxy-list/ was fetched successfully"
+    metadata: 
+      // filename: lib/Scrappy/Scraper.pm
+      // line: 999
+      // notation: http://www.hidemyass.com/proxy-list/ was fetched successfully
+      // occurred: 2011-04-22 13:33:45
+      // package: Scrappy::Scraper
+  - 
+    eventlog: "[2011-04-22 13:33:46] [info] posted data to http://www.hidemyass.com/proxy-list/ successfully"
+    metadata: 
+      // filename: lib/Scrappy/Scraper.pm
+      // line: 999
+      // notation: posted data to http://www.hidemyass.com/proxy-list/ successfully
+      // occurred: 2011-04-22 13:33:46
+      // package: Scrappy::Scraper
+      Content-Type: application/x-www-form-urlencoded
+      Referer: http://www.hidemyass.com/proxy-list/
+      http://www.hidemyass.com/proxy-list/: 
+        a[]: 
+          - 2
+          - 3
+          - 4
+        ac: 'on'
+        c[]: 
+          - United States
+          - Indonesia
+          - China
+          - Brazil
+          - Russian Federation
+          - Iran, Islamic Republic of
+          - Germany
+          - India
+          - Korea, Republic of
+          - Kazakhstan
+          - Ukraine
+          - Japan
+          - Colombia
+          - Thailand
+          - Egypt
+          - Taiwan
+          - Spain
+          - Canada
+          - Argentina
+          - Poland
+          - Czech Republic
+          - Turkey
+          - South Africa
+          - Venezuela
+          - France
+          - Netherlands
+          - Peru
+          - Vietnam
+          - Mexico
+          - Switzerland
+          - Bulgaria
+          - Kenya
+          - Ecuador
+          - Latvia
+          - Portugal
+          - Slovakia
+          - Chile
+          - Italy
+          - Denmark
+          - Moldova, Republic of
+          - United Kingdom
+          - Greece
+          - Norway
+          - Israel
+          - Hungary
+          - Nigeria
+          - Ireland
+          - Australia
+          - Hong Kong
+          - Finland
+          - Philippines
+          - United Arab Emirates
+          - Ghana
+          - Bangladesh
+          - Lebanon
+          - Romania
+          - Syrian Arab Republic
+          - Austria
+          - Sri Lanka
+          - Serbia
+          - Sweden
+          - Macau
+          - Iraq
+          - Malaysia
+          - Macedonia
+          - Malta
+          - Jamaica
+          - Niger
+          - Belarus
+          - Bahamas
+          - Antarctica
+          - Bosnia and Herzegovina
+          - Mozambique
+          - Benin
+          - Grenada
+          - Cote D'Ivoire
+          - Mauritania
+          - Brunei Darussalam
+          - Ethiopia
+          - Pakistan
+          - Chad
+          - Paraguay
+          - Puerto Rico
+          - Cambodia
+          - Singapore
+          - Guatemala
+          - Fiji
+          - Croatia
+          - Kuwait
+          - Palestinian Territory
+          - Albania
+          - Zimbabwe
+          - Bolivia
+          - Maldives
+          - Luxembourg
+        o: 0
+        p: 80
+        pl: 'on'
+        pp: 3
+        pr[]: 
+          - 0
+        s: 0
+        sortBy: date
+  - 
+    eventlog: "[2011-04-22 13:33:47] [info] Proxy list created from hidemyass.com"
+    metadata: 
+      // filename: lib/Scrappy/Scraper.pm
+      // line: 999
+      // notation: Proxy list created from hidemyass.com
+      // occurred: 2011-04-22 13:33:47
+      // package: Scrappy::Scraper
+      proxy_list: 
+        - 190.254.22.56:80
+        - 69.104.98.153:80
+        - 81.29.253.10:80
+        - 221.130.162.205:80
+        - 221.130.162.248:80
+        - 91.143.58.1:80
+        - 189.200.240.68:80
+        - 202.171.253.70:80
+        - 221.174.16.60:80
+        - 202.171.253.71:80
+        - 61.233.25.166:80
+        - 221.203.79.101:80
+        - 91.120.21.169:80
+        - 202.186.124.148:80
+        - 122.205.95.27:80
+        - 219.166.83.4:80
+        - 164.78.252.25:80
+        - 221.130.162.249:80
+        - 88.191.129.214:80
+        - 200.159.102.171:80
+        - 173.192.60.3:80
+        - 62.148.136.79:80
+        - 58.119.6.163:80
+        - 202.6.96.14:80
+        - 202.6.97.7:80
+        - 221.130.162.204:80
+        - 84.245.236.22:80
+        - 184.60.22.12:80
+        - 78.189.205.65:80
+        - 210.52.215.162:80
+  - 
+    eventlog: "[2011-04-22 13:33:47] [info] Set proxy http://122.205.95.27:80/ using protocol(s) http"
+    metadata: 
+      // filename: lib/Scrappy/Scraper.pm
+      // line: 999
+      // notation: Set proxy http://122.205.95.27:80/ using protocol(s) http
+      // occurred: 2011-04-22 13:33:47
+      // package: Scrappy::Scraper
+  - 
+    eventlog: "[2011-04-22 13:33:47] [info] Proxy has been set to 122.205.95.27:80 using the HTTP protocol"
+    metadata: 
+      // filename: lib/Scrappy/Scraper.pm
+      // line: 999
+      // notation: Proxy has been set to 122.205.95.27:80 using the HTTP protocol
+      // occurred: 2011-04-22 13:33:47
+      // package: Scrappy::Scraper

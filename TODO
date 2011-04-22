@@ -1,7 +1,13 @@
+# BUGS & ISSUES
+  -   Scrappy::
+      - alphabetize methods
+  -   Scrappy::Logger
+      x move all attributes of the log except for eventlog under the metadata hash
 # WISHLIST
-  -   add plugin system
+  x   add plugin system
   -   use HTML::Zoom to update html page content
   -   use HTML::Scrubber to strip unwanted content
 # PLUGINS
+  x   random proxy plugin
   -   whois plugin
   
