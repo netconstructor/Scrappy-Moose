@@ -636,8 +636,8 @@ The response method returns the HTTP::Repsonse object of the current page.
 
 =method select
 
-The select method takes XPATH or CSS selectors and returns an arrayref
-with the matching elements.
+The select method takes XPATH or CSS selectors and returns a
+L<Scrappy::Scraper::Parser> object which contains the matching elements.
 
     my $scraper = Scrappy->new;
     
