@@ -10,6 +10,44 @@ use Moose;
 use Carp;
 extends 'Scrappy::Scraper';
 
+sub crawl {
+    my ($self, $starting_url, %pages) = @_;
+
+    croak(
+        'Please provide a starting URL and a valid configuration before crawling'
+    ) unless ($self && $starting_url && keys %pages);
+
+    # register the starting url
+    $self->queue->add($starting_url);
+
+    # start the crawl loop
+    while (my $url = $self->queue->next) {
+
+        # check if the url matches against any registered pages
+        foreach my $page (keys %pages) {
+            my $data = $self->page_match($page, $url);
+
+            if ($data) {
+
+                # found a page match, fetch and scrape the page for data
+                $self->get($url);
+
+                foreach my $selector (keys %{$pages{$page}}) {
+
+                    # loop through resultset
+                    foreach my $item (@{$self->select($selector)->data}) {
+
+                        # execute selector code
+                        $pages{$page}->{$selector}->($self, $item, $data);
+                    }
+                }
+            }
+        }
+    }
+    
+    return $self;
+}
+
 =head1 SYNOPSIS
 
     #!/usr/bin/perl
@@ -226,42 +264,6 @@ a simplified example, ... the following is a more complex example.
         );
 
 =cut
-
-sub crawl {
-    my ($self, $starting_url, %pages) = @_;
-
-    croak(
-        'Please provide a starting URL and a valid configuration before crawling'
-    ) unless ($self && $starting_url && keys %pages);
-
-    # register the starting url
-    $self->queue->add($starting_url);
-
-    # start the crawl loop
-    while (my $url = $self->queue->next) {
-
-        # check if the url matches against any registered pages
-        foreach my $page (keys %pages) {
-            my $data = $self->page_match($page, $url);
-
-            if ($data) {
-
-                # found a page match, fetch and scrape the page for data
-                $self->get($url);
-
-                foreach my $selector (keys %{$pages{$page}}) {
-
-                    # loop through resultset
-                    foreach my $item (@{$self->select($selector)->data}) {
-
-                        # execute selector code
-                        $pages{$page}->{$selector}->($self, $item, $data);
-                    }
-                }
-            }
-        }
-    }
-}
 
 =method domain
 

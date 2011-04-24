@@ -1,13 +1,27 @@
 # BUGS & ISSUES
+  -   scrappy
+      - create a cli
+      - ... include project creation
+      - ... run a project
   -   Scrappy::
       - alphabetize methods
+      - POD documentation
+  -   Scrappy::Console
+      - create class to report activity to the cli
   -   Scrappy::Logger
       x move all attributes of the log except for eventlog under the metadata hash
+  -   Scrappy::Scraper
+      - all get, post, etc actions should be wrapped with Tiny::Try or the like
+  -   Scrappy::Scraper::Control
+      - is_allowed is checking against a url instead of a domain
+      - add other constraints e.g. filesize, file-extension, etc
   -   Scrappy::Scraper::Transformer
       - create transformer class for manipulating the current HTML document
-        possibly using HTML::Zoom, Template::Semantic and maybe even HTML::Scrubber
+      - possibly using HTML::Zoom, Template::Semantic and maybe even HTML::Scrubber
 # CORE PLUGINS
-  x   Scrappy::Plugin::RandomProxy - random proxy plugin
+  x   Scrappy::Plugin::RandomProxy - use a random proxy from hidemyass.com
+  -   Scrappy::Plugin::BlobStore - save chunks of data to disk and return random-generated path
   -   Scrappy::Plugin::TestProxy - test proxy environment
-  -   Scrappy::Plugin::Whois - whois plugin
+  -   Scrappy::Plugin::Whois - return whois information for the specified domain
+  -   Scrappy::Plugin::LinkChecker - check the validity of the specified link
   

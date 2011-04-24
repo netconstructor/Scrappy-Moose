@@ -1,0 +1,8 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use MyApp;
+
+MyApp
+->spider('http://localhost/') ; # ... and away we go ...

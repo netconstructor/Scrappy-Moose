@@ -4,7 +4,6 @@ package Scrappy::Plugin;
 use Moose;
 
 # load other libraries
-use Carp;
 use File::Find::Rule;
 
 # a hash list of installed plugins
