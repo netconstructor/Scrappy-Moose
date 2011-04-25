@@ -1,0 +1,36 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use File::Basename 'dirname';
+use File::Spec;
+
+=head1 NAME
+
+scrappy - The Scrappy CLI Actions System
+
+=head1 SYNOPSIS
+
+    $ scrappy help
+
+=head1 DESCRIPTION
+
+List and run L<Scrappy> actions as described in
+L<Scrappy::Actions>.
+
+=cut
+
+# is Scrappy installed
+eval 'use Scrappy::Action';
+die <<EOF if $@;
+
+It looks like you don't have the Scrappy Framework installed.
+Please visit http://search.cpan.org/dist/Scrappy/ for detailed installation instructions.
+
+EOF
+
+# Start the command system
+Scrappy::Action->new->execute(@ARGV);
+
+1;

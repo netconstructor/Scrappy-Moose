@@ -35,7 +35,9 @@ has plugins => (
           File::Find::Rule->file()->name('*.pm')
           ->in(map {"$_/Scrappy/Plugin"} @INC);
 
-        for my $plugin (@files) {
+        my %plugins = map { $_ => 1 } @files; #uniquenes
+
+        for my $plugin (keys %plugins) {
 
             my ($plug) = $plugin =~ /(Scrappy\/Plugin\/.*)\.pm/;
 

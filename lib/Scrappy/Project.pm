@@ -29,7 +29,9 @@ has parsers => (
           File::Find::Rule->file()->name('*.pm')
           ->in( map { "$_/$class" } @INC );
 
-        for my $parser (@files) {
+        my %parsers = map { $_ => 1 } @files; #uniquenes
+
+        for my $parser (keys %parsers) {
 
             my ($plug) = $parser =~ /($class\/.*)\.pm/;
 
