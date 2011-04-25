@@ -22,7 +22,7 @@ sub project {
         use lib 'lib';
         use [% project %];
         
-        [% project %]->spider('http://localhost/') ; # ... and away we go ...
+        [% project %]->spider('http://www.[% object %].com/') ; # ... and away we go ...
     });
     
     File::Util->new->write_file(
@@ -58,7 +58,7 @@ sub project {
                     $scraper->session->write('session.yml');
                     
                 # define route(s) - route web pages to parsers
-                $[% object %]->route('/' => 'item');
+                $[% object %]->route('/' => 'page');
                 
                 # return your configured app instance
                 $[% object %];
