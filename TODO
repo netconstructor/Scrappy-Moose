@@ -1,7 +1,7 @@
 # BUGS & ISSUES
   -   scrappy
-      - create a cli
-      - ... include project creation
+      x create a cli
+      x ... include project creation
       - ... run a project
   -   Scrappy::
       - alphabetize methods
