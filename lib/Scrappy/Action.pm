@@ -27,17 +27,19 @@ has registry => (
 );
 
 sub actions {
-    my @actions = ();
+    my  @actions = ();
 
-    my @files =
-      File::Find::Rule->file()->name('*.pm')
-      ->in(map {"$_/Scrappy/Action"} @INC);
-      
-    my %actions = map { $_ => 1 } @files; #uniquenes
-    
+    my  @files =
+        File::Find::Rule->file()->name('*.pm')
+        ->in(map {"$_/Scrappy/Action"} @INC);
+
+    my  %actions =
+        map { $_ => 1 }
+            map { s/.*(Scrappy[\\\/]Action[\\\/].*\.pm)/$1/; $_ } @files; #uniquenes
+
     for my $action (keys %actions) {
 
-        my ($plug) = $action =~ /(Scrappy\/Action\/.*)\.pm/;
+        my ($plug) = $action =~ /(Scrappy[\\\/]Action[\\\/].*)\.pm/;
 
         if ($plug) {
             $plug =~ s/\//::/g;

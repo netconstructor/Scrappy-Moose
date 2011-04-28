@@ -19,17 +19,19 @@ has parsers => (
     is      => 'ro',
     isa     => 'Any',
     default => sub {
-        my $self    = shift;
-        my $class   = ref $self;
-        my @parsers = ();
+        my  $self    = shift;
+        my  $class   = ref $self;
+        my  @parsers = ();
 
-        $class =~ s/::/\//g;
+            $class =~ s/::/\//g;
 
-        my @files =
-          File::Find::Rule->file()->name('*.pm')
-          ->in( map { "$_/$class" } @INC );
-
-        my %parsers = map { $_ => 1 } @files; #uniquenes
+        my  @files =
+            File::Find::Rule->file()->name('*.pm')
+            ->in( map { "$_/$class" } @INC );
+        
+        my  %parsers =
+            map { $_ => 1 }
+                @files; #uniquenes
 
         for my $parser (keys %parsers) {
 
