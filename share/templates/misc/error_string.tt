@@ -1,9 +1,0 @@
-:> 
-[%- IF s.stash.errors.size %]
-[%- FOREACH c = s.stash.errors %]
-!> [%- c -%]
-[% END %]
-[%- ELSE %]
-!> Invalid command. Type help; for a list of commands.
-[%- END %]
-:> 

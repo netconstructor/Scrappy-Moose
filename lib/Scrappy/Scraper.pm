@@ -144,7 +144,7 @@ sub back {
         }
     );
 
-    return $self;
+    return $self->url;
 }
 
 sub cookies {
@@ -154,7 +154,7 @@ sub cookies {
 }
 
 sub domain {
-    return shift->worker->base;
+    return shift->worker->base->host;
 }
 
 sub download {
@@ -362,8 +362,8 @@ sub page_data {
     if ($data) {
         $self->worker->update_html($data);
     }
-
-    return $self->content->decoded_content(@args);
+    
+    return $self->worker->content(@args);
 }
 
 sub page_content_type {
@@ -379,12 +379,12 @@ sub page_loaded {
 }
 
 sub page_match {
-    my $self    = shift;
-    my $pattern = shift;
-    my $url     = shift || $self->url;
-    $url = URI->new($url);
-    my $options = shift || {};
-
+    my  $self    = shift;
+    my  $pattern = shift;
+    my  $url     = shift || $self->url;
+        $url     = URI->new($url);
+    my  $options = shift || {};
+    
     croak("route can't be defined without a valid URL pattern")
       unless $pattern;
 
@@ -472,6 +472,7 @@ sub page_match {
         }
         $match->{params} = {%args};
         $match->{params}->{splat} = \@splat if @splat;
+        
         return $match;
     }
 

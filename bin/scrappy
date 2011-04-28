@@ -8,16 +8,18 @@ use File::Spec;
 
 =head1 NAME
 
-scrappy - The Scrappy CLI Actions System
+scrappy - The Scrappy Command-Line Utility
 
 =head1 SYNOPSIS
 
-    $ scrappy help
+    $ scrappy
+    $ scrappy ...
+    $ scrappy generate project
 
 =head1 DESCRIPTION
 
-List and run L<Scrappy> actions as described in
-L<Scrappy::Actions>.
+List and run L<Scrappy> actions to build web crawlers, generate boiler-plate code
+and more. Install actions from the L<Scrappy::Actions> namespace.
 
 =cut
 
