@@ -126,6 +126,7 @@ sub execute {
         # run the requested action
         print $self->meta->has_method($action) ?
             $self->$action(@options) : $self->help($requested_action);
+        print "\n";
     }
     else {
         # ... or display the help menu
