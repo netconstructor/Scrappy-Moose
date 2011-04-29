@@ -91,6 +91,7 @@ sub execute {
             
             with 'Scrappy::Action::Help';
             print $self->menu;
+            print "\n";
             exit;
             
         }
@@ -102,6 +103,7 @@ sub execute {
                     
                     with 'Scrappy::Action::Help';
                     print $self->menu;
+                    print "\n";
                     exit;
                 }
             }
@@ -117,6 +119,7 @@ sub execute {
         # is actoin available
         unless ($action) {
             print $self->help($requested_action);
+            print "\n";
             exit;
         }
         
@@ -128,6 +131,7 @@ sub execute {
         # ... or display the help menu
         with 'Scrappy::Action::Help';
         print $self->menu;
+        print "\n";
     }
 }
 
