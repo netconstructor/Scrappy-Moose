@@ -16,10 +16,11 @@ sub load {
 
         $self->{file} = $file;
 
+        croak("Session file $file does not exist or is not read/writable")
+            unless -f $file;
+
         # load session file
-        $self->{stash} = LoadFile($file)
-          or
-          croak("Session file $file does not exist or is not read/writable");
+        $self->{stash} = LoadFile($file);
     }
 
     return $self->{stash};
@@ -61,9 +62,10 @@ sub write {
     if ($file) {
 
         # write session file
-        DumpFile($file, $self->{stash})
-          or
-          croak("Session file $file does not exist or is not read/writable");
+        croak("Session file $file does not exist or is not read/writable")
+            unless -f $file;
+
+        DumpFile($file, $self->{stash});
     }
 
     return $self->{stash};

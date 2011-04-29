@@ -19,7 +19,7 @@ scrappy - The Scrappy Command-Line Utility
 =head1 DESCRIPTION
 
 List and run L<Scrappy> actions to build web crawlers, generate boiler-plate code
-and more. Install actions from the L<Scrappy::Actions> namespace.
+and more. Install actions from the L<Scrappy::Action> namespace.
 
 =cut
 

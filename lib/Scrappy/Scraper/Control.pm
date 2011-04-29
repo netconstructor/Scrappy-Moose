@@ -1,4 +1,4 @@
-# ABSTRACT: Scrappy Request Constraints System
+# ABSTRACT: Scrappy HTTP Request Constraints System
 # Dist::Zilla: +PodWeaver
 
 package Scrappy::Scraper::Control;

@@ -8,9 +8,10 @@ with 'Scrappy::Action::Help';
 sub script {
     my  ($self, @options) = @_;
     my  $script_name = $options[0] || "myapp.pl";
+        $script_name =~ s/\.pl$//;
     
     File::Util->new->write_file(
-      'file'    => "$script_name",
+      'file'    => "$script_name.pl",
       'bitmask' => 0644,
       'content' => strip tt q{
         #!/usr/bin/perl
@@ -30,13 +31,13 @@ sub script {
             $scraper->logger->verbose(0);
             
             # create a new log file with each execution
-            $scraper->logger->write("logs/$datetime.yml")
+            $scraper->logger->write($script_name . "_logs/$datetime.yml")
                 if $scraper->debug;
             
             # load session file for persistent storage between executions
             -f 'session.yml' ?
-                $scraper->session->load('session.yml') :
-                $scraper->session->write('session.yml');
+                $scraper->session->load($script_name . '.session') :
+                $scraper->session->write($script_name . '.session');
                 
             # crawl something ...
             $scraper->crawl('http://localhost/',
@@ -50,7 +51,7 @@ sub script {
             
     });
     
-    return "\n... successfully created script $script_name\n";
+    return "\n... successfully created script $script_name.pl\n";
 }
 
 sub project {

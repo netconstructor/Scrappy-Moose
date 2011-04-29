@@ -23,6 +23,7 @@ sub add {
     # validate and formulate proper URLs
     for (my $i = 0; $i < @urls; $i++) {
         my $u = URI->new($urls[$i]);
+        
         if ('URI::_generic' ne ref $u) {
             $urls[$i] = $u->as_string;
         }
