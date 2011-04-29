@@ -1,3 +1,6 @@
+# ABSTRACT: Scrappy Scraper Event Logging
+# Dist::Zilla: +PodWeaver
+
 package Scrappy::Logger;
 
 # load OO System
@@ -8,9 +11,62 @@ use Carp;
 use DateTime;
 use DateTime::Format::SQLite;
 use YAML::Syck;
-$YAML::Syck::ImplicitTyping = 1;
+    $YAML::Syck::ImplicitTyping = 1;
 
+has file => (is => 'rw', isa => 'Str');
 has verbose => (is => 'rw', isa => 'Int', default => 0);
+
+=head1 SYNOPSIS
+
+    #!/usr/bin/perl
+    use Scrappy::Logger;
+
+    my  $logger = Scrappy::Logger->new;
+    
+        -f 'scraper.log' ?
+        $logger->load('scraper.log');
+        $logger->write('scraper.log');
+        
+        $logger->stash('foo' => 'bar');
+        $logger->stash('abc' => [('a'..'z')]);
+        
+=head1 DESCRIPTION
+
+Scrappy::Logger provides YAML-Based event-log handling for recording events
+encountered using the L<Scrappy> framework.
+
+=head2 ATTRIBUTES
+
+The following is a list of object attributes available with every Scrappy::Logger
+instance.
+
+=head3 file
+
+The file attribute gets/sets the filename of the current event-log file.
+
+    my  $logger = Scrappy::Logger->new;
+        
+        $logger->load('scraper.log');
+        $logger->write('scraper.log.bak');
+        $logger->file('scraper.log');
+        
+=head3 verbose
+
+The verbose attribute is a boolean that instructs the logger to write very
+detailed logs.
+
+    my  $logger = Scrappy::Logger->new;
+        $logger->verbose(1);
+        
+=method load
+
+The load method is used to read-in an event-log file, it returns its data in the
+structure it was saved-in.
+
+    my  $logger = Scrappy::Logger->new;
+    my  $data = $logger->load('scraper.log');
+
+=cut
 
 sub load {
     my $self = shift;
@@ -20,13 +76,25 @@ sub load {
 
         $self->{file} = $file;
 
-        # load session file
+        # load event-log file
         $self->{stash} = LoadFile($file)
           or croak("Log file $file does not exist or is not read/writable");
     }
 
     return $self->{stash};
 }
+
+=method timestamp
+
+The timestamp method returns the current date/timestamp in string form. When
+supplied a properly formatted date/timestamp this method returns a corresponding
+L<DateTime> object.
+
+    my  $logger = Scrappy::Logger->new;
+    my  $date = $logger->timestamp;
+    my  $dt = $logger->timestamp($date);
+
+=cut
 
 sub timestamp {
     my $self = shift;
@@ -47,17 +115,69 @@ sub timestamp {
     }
 }
 
+=method info
+
+The info method is used to capture informational events and returns the event
+data.
+
+    my  $logger = Scrappy::Logger->new;
+    my  %data = (foo => 'bar', baz => 'xyz');
+    my  $event = $logger->info('This is an informational message', %data);
+    
+        $logger->info('This is an informational message');
+
+=cut
+
 sub info {
     return shift->event('info', @_);
 }
+
+=method warn
+
+The warn method is used to capture warning events and returns the event
+data.
+
+    my  $logger = Scrappy::Logger->new;
+    my  %data = (foo => 'bar', baz => 'xyz');
+    my  $event = $logger->warn('This is a warning message', %data);
+    
+        $logger->info('This is an warning message');
+
+=cut
 
 sub warn {
     return shift->event('warn', @_);
 }
 
+=method error
+
+The error method is used to capture error events and returns the event
+data.
+
+    my  $logger = Scrappy::Logger->new;
+    my  %data = (foo => 'bar', baz => 'xyz');
+    my  $event = $logger->error('This is a n error message', %data);
+    
+        $logger->info('This is an error message');
+
+=cut
+
 sub error {
     return shift->event('error', @_);
 }
+
+=method event
+
+The event method is used to capture custom events and returns the event
+data.
+
+    my  $logger = Scrappy::Logger->new;
+    my  %data = (foo => 'bar', baz => 'xyz');
+    my  $event = $logger->event('myapp', 'This is a user-defined message', %data);
+    
+        $logger->event('myapp', 'This is a user-defined message');
+
+=cut
 
 sub event {
     my $self = shift;
@@ -107,6 +227,20 @@ sub event {
     return $self->{stash}->{$type}->[$entry];
 }
 
+=method write
+
+The write method is used to write-out an event-log file.
+
+    my  $logger = Scrappy::Logger->new;
+    
+        $logger->info('This is very cool', 'foo' => 'bar');
+        $logger->warn('Somethin aint right here');
+        $logger->error('It broke, I cant believe it broke');
+    
+        $logger->write('scraper.log');
+
+=cut
+
 sub write {
     my $self = shift;
     my $file = shift || $self->{file};
@@ -115,10 +249,10 @@ sub write {
 
     if ($file) {
 
-        # write session file
+        # write event-log file
         DumpFile($file, $self->{stash})
           or
-          croak("Session file $file does not exist or is not read/writable");
+          croak("event-log file $file does not exist or is not read/writable");
     }
 
     return $self->{stash};

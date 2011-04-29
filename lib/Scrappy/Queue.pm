@@ -1,3 +1,6 @@
+# ABSTRACT: Scrappy HTTP Request Flow-Control System  
+# Dist::Zilla: +PodWeaver
+
 package Scrappy::Queue;
 
 # load OO System
@@ -12,9 +15,49 @@ our @_queue = ();
 tie @_queue, 'Array::Unique';
 our $_cursor = -1;
 
+=head1 SYNOPSIS
+
+    #!/usr/bin/perl
+    use Scrappy::Queue;
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add($url);
+        
+        while (my $url = $queue->next) {
+            ... $queue->add(...);
+        }
+        
+=head1 DESCRIPTION
+
+Scrappy::Queue provides a system for saving URLs to a recordset/queue and iterating
+of them using the L<Scrappy> framework.
+
+=method list
+
+The list method return the list of URLs in the queue. This is returned in list
+context.
+
+    my  $queue = Scrappy::Queue->new;
+    
+    ...
+    
+    my  @list = $queue->list;
+
+=cut
+
 sub list {
     return @_queue;
 }
+
+=method add
+
+The add method adds new URLs to the queue. Duplicate URLs will be ignored.
+
+    my  $queue = Scrappy::Queue->new;
+        $queue->add($url);
+
+=cut
 
 sub add {
     my $self = shift;
@@ -24,7 +67,7 @@ sub add {
     for (my $i = 0; $i < @urls; $i++) {
         my $u = URI->new($urls[$i]);
         
-        if ('URI::_generic' ne ref $u) {
+        if ('URI::' =~ ref $u) {
             $urls[$i] = $u->as_string;
         }
         else {
@@ -38,6 +81,20 @@ sub add {
     return $self;
 }
 
+=method clear
+
+The clear method completely empties the queue and resets the cursor (loop position).
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+    
+        $queue->clear;
+
+=cut
+
 sub clear {
     my $self = shift;
 
@@ -47,6 +104,24 @@ sub clear {
     return $self;
 }
 
+=method reset
+
+The reset method resets the cursor (loop position).
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        while (my $url = $queue->next) {
+            $queue->reset if ...; # beware the infinate loop
+        }
+        
+        $queue->reset;
+
+=cut
+
 sub reset {
     my $self = shift;
 
@@ -55,11 +130,45 @@ sub reset {
     return $self;
 }
 
+=method current
+
+The current method returns the URL in the current loop position.
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        while (my $url = $queue->next) {
+            last if ...;
+        }
+        
+        print 'great' if $url eq $queue->current;
+
+=cut
+
 sub current {
     my $self = shift;
 
     return $_queue[$_cursor];
 }
+
+=method next
+
+The next method moves the cursor to the next loop position and returns the URL.
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        while (my $url = $queue->next) {
+            ...
+        }
+
+=cut
 
 sub next {
     my $self = shift;
@@ -67,11 +176,44 @@ sub next {
     return $_queue[++$_cursor];
 }
 
+=method previous
+
+The previous method moves the cursor to the previous loop position and returns the URL.
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        while (my $url = $queue->next) {
+            ...
+        }
+        
+        print $queue->previous;
+
+=cut
+
 sub previous {
     my $self = shift;
 
     return $_queue[--$_cursor];
 }
+
+=method first
+
+The first method moves the cursor to the first loop position and returns the URL.
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        print $queue->first;
+
+=cut
+
 
 sub first {
     my $self = shift;
@@ -80,6 +222,20 @@ sub first {
     return $_queue[$_cursor];
 }
 
+=method last
+
+The last method moves the cursor to the last loop position and returns the URL.
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        print $queue->last;
+
+=cut
+
 sub last {
     my $self = shift;
     $_cursor = scalar(@_queue) - 1;
@@ -87,12 +243,36 @@ sub last {
     return $_queue[$_cursor];
 }
 
+=method index
+
+The index method moves the cursor to the specified loop position and returns the
+URL. The loop position is a standard array index position.
+
+    my  $queue = Scrappy::Queue->new;
+    
+        $queue->add(...);
+        $queue->add(...);
+        $queue->add(...);
+        
+        print $queue->index(1);
+
+=cut
+
 sub index {
     my $self = shift;
     $_cursor = shift || 0;
 
     return $_queue[$_cursor];
 }
+
+=method cursor
+
+The cursor method returns the current loop position.
+
+    my  $queue = Scrappy::Queue->new;
+        print $queue->cursor;
+
+=cut
 
 sub cursor {
     return $_cursor;

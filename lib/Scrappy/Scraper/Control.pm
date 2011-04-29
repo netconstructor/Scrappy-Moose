@@ -17,7 +17,7 @@ has 'restricted' => (is => 'rw', isa => 'HashRef', default => sub { {} });
 =head1 SYNOPSIS
 
     #!/usr/bin/perl
-    use Scrappy::Scraper::Control
+    use Scrappy::Scraper::Control;
 
     my  $control = Scrappy::Scraper::Control->new;
     

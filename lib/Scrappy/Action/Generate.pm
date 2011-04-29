@@ -35,7 +35,7 @@ sub script {
                 if $scraper->debug;
             
             # load session file for persistent storage between executions
-            -f 'session.yml' ?
+            -f '[% script_name %].session' ?
                 $scraper->session->load('[% script_name %].session') :
                 $scraper->session->write('[% script_name %].session');
                 

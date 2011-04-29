@@ -1,3 +1,6 @@
+# ABSTRACT: Scrappy Scraper Session Handling
+# Dist::Zilla: +PodWeaver
+
 package Scrappy::Session;
 
 # load OO System
@@ -8,13 +11,59 @@ use Carp;
 use YAML::Syck;
 $YAML::Syck::ImplicitTyping = 1;
 
+has 'file' => (is => 'ro', isa => 'Str');
+
+=head1 SYNOPSIS
+
+    #!/usr/bin/perl
+    use Scrappy::Session;
+
+    my  $session = Scrappy::Session->new;
+    
+        -f 'scraper.sess' ?
+        $session->load('scraper.sess');
+        $session->write('scraper.sess');
+        
+        $session->stash('foo' => 'bar');
+        $session->stash('abc' => [('a'..'z')]);
+        
+=head1 DESCRIPTION
+
+Scrappy::Session provides YAML-Based session file handling for saving recorded
+data across multiple execution using the L<Scrappy> framework.
+
+=head2 ATTRIBUTES
+
+The following is a list of object attributes available with every Scrappy::Session
+instance.
+
+=head3 file
+
+The file attribute gets/sets the filename of the current session file.
+
+    my  $session = Scrappy::Session->new;
+        
+        $session->load('scraper.sess');
+        $session->write('scraper.sess.bak');
+        $session->file('scraper.sess');
+        
+=method load
+
+The load method is used to read-in a session file, it returns its data in the
+structure it was saved-in.
+
+    my  $session = Scrappy::Session->new;
+    my  $data = $session->load('scraper.sess');
+
+=cut
+
 sub load {
     my $self = shift;
     my $file = shift;
 
     if ($file) {
 
-        $self->{file} = $file;
+        $self->file($file);
 
         croak("Session file $file does not exist or is not read/writable")
             unless -f $file;
@@ -25,6 +74,20 @@ sub load {
 
     return $self->{stash};
 }
+
+=method stash
+
+The stash method accesses the stash object which is used to store data to be
+written to the session file.
+
+    my  $session = Scrappy::Session->new;
+        $session->load('scraper.sess');
+        
+        $session->stash('foo' => 'bar');
+        $session->stash('abc' => [('a'..'z')]);
+        $session->stash->{123} = [(1..9)];
+
+=cut
 
 sub stash {
     my $self = shift;
@@ -53,11 +116,26 @@ sub stash {
     return $self->{stash};
 }
 
+=method write
+
+The write method is used to write-out a session file, it saves the data stored
+in the session stash and it returns the data written upon completion.
+
+    my  $session = Scrappy::Session->new;
+    
+        $session->stash('foo' => 'bar');
+        $session->stash('abc' => [('a'..'z')]);
+        $session->stash->{123} = [(1..9)];
+    
+    my  $data = $session->write('scraper.sess');
+
+=cut
+
 sub write {
     my $self = shift;
-    my $file = shift || $self->{file};
+    my $file = shift || $self->file;
 
-    $self->{file} = $file;
+    $self->file($file);
 
     if ($file) {
 

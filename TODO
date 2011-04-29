@@ -15,11 +15,14 @@
   -   Scrappy::Scraper::Control
       - is_allowed is checking against a url instead of a domain
       - add other constraints e.g. filesize, file-extension, etc
+  -   Scrappy::Scraper::UserAgent
+      - delete in favor of a plugin
   -   Scrappy::Scraper::Transformer
       - create transformer class for manipulating the current HTML document
       - possibly using HTML::Zoom, Template::Semantic and maybe even HTML::Scrubber
 # CORE PLUGINS
   x   Scrappy::Plugin::RandomProxy - use a random proxy from hidemyass.com
+  -   Scrappy::Plugin::RandomUserAgent - use a random user-agent string
   -   Scrappy::Plugin::BlobStore - save chunks of data to disk and return random-generated path
   -   Scrappy::Plugin::TestProxy - test proxy environment
   -   Scrappy::Plugin::Whois - return whois information for the specified domain
