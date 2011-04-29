@@ -1,4 +1,3 @@
-# ABSTRACT: Fresh random proxy for Scrappy
 package Scrappy::Plugin::RandomProxy;
 
 use Moose::Role;

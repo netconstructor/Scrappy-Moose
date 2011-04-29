@@ -13,7 +13,7 @@
   -   Scrappy::Scraper
       - all get, post, etc actions should be wrapped with Tiny::Try or the like
   -   Scrappy::Scraper::Control
-      - is_allowed is checking against a url instead of a domain
+      x is_allowed is checking against a url instead of a domain
       - add other constraints e.g. filesize, file-extension, etc
   -   Scrappy::Scraper::UserAgent
       - delete in favor of a plugin
