@@ -11,7 +11,7 @@ use Carp;
 use YAML::Syck;
 $YAML::Syck::ImplicitTyping = 1;
 
-has 'file' => (is => 'ro', isa => 'Str');
+has 'file' => (is => 'rw', isa => 'Str');
 
 =head1 SYNOPSIS
 
@@ -140,10 +140,11 @@ sub write {
     if ($file) {
 
         # write session file
+        DumpFile($file, $self->{stash});
+        
+        # ... ummm
         croak("Session file $file does not exist or is not read/writable")
           unless -f $file;
-
-        DumpFile($file, $self->{stash});
     }
 
     return $self->{stash};

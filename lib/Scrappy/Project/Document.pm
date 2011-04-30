@@ -14,9 +14,8 @@ has fields => (
         for ($self->meta->get_all_methods) {
             push @fields, $_->name
               if $_->package_name eq ref $self
-                  &&
-
-                     $_->name ne 'meta'
+                  && $_->name ne 'meta'
+                  && $_->name ne 'scraper'
                   && $_->name ne 'fields'
                   && $_->name ne 'parse'
                   && $_->name ne 'records'
@@ -46,6 +45,7 @@ sub parse {
 
     my $record = {};
     map { $record->{$_} = $self->$_($self->scraper, $vars) } @{$self->fields};
+    $record->{url} = $self->scraper->url->as_string;
     push @{$self->records}, $record;
 
     return $record;

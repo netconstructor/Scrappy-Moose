@@ -219,6 +219,86 @@ and extract data.
     my  $parser = Scrappy::Scraper::Parser->new;
         $parser->worker;
         
+=cut
+
+=method filter
+
+The filter method allows you to filter the tags returned within the results by
+supplying the filter method with a list of tag attributes that you specifically
+want to return, forsaking all others, including the special text and html
+tags/keys.
+    
+    # filter results and only return meta tags with a content attribute
+    my  $parser = Scrappy::Scraper::Parser->new;
+        $parser->select('meta');
+        print $parser->data;
+        
+        ...
+        
+        {
+            name => '...',
+            text => '...',
+            html => '...',
+            content => '....',
+            http => '...',
+            ....
+        }
+        
+        print $parser->filter('name', 'content')->data;
+        
+        ...
+        
+        {
+            name => '...',
+            content => '....',
+        }
+
+=cut
+
+sub filter {
+    my ($self, @filters) = @_;
+    
+    # remove filter list
+    if (@filters) {
+        # remove all except for specified attributes
+        $self->data([
+            map {
+                my $record = $_;
+                my $changes = {};
+                foreach my $filter (@filters) {
+                    #if ('HASH' eq ref $filter) {
+                    #    my ($tag, $value) = each(%{$filter});
+                    #    $changes->{$filter} = $record->{$filter}
+                    #        if $record->{$filter}
+                    #        && $record->{$filter} eq $value
+                    #        && $filter eq $tag;
+                    #}
+                    #else {
+                        $changes->{$filter} = $record->{$filter}
+                            if $record->{$filter};
+                    #}
+                }
+                $changes;
+            }   @{$self->data}
+        ]);
+    }
+    
+    # remove all empty attributes
+    $self->data([
+        map {
+            my $record = $_;
+            foreach my $tag (keys %{$record}) {
+                delete $record->{$tag} if !$record->{$tag}
+                    && $tag ne 'html'
+                    && $tag ne 'text';
+            }
+            $record;
+        }   @{$self->data}
+    ]);
+    
+    return $self;
+}
+
 =method focus
 
 The focus method is used zero-in on specific blocks of HTML so the selectors only
@@ -242,7 +322,7 @@ sub focus {
     my $index = shift || 0;
 
     $self->has_html;
-
+    
     $self->html($self->data->[$index]->{html});
     return $self;
 }
@@ -293,6 +373,7 @@ sub select {
     my $scraper = $self->worker->{code};
 
     $self->data($scraper->scrape($self->html)->{data} || []);
+    $self->filter;
     return $self;
 }
 
