@@ -14,7 +14,14 @@ scrappy - The Scrappy Command-Line Utility
 
     $ scrappy
     $ scrappy ...
-    $ scrappy generate project
+    $ scrappy generate project MyApp
+    
+For fun, download a web page using the Scrappy Action Download, .e.g ....
+
+    $ scrappy download page http://search.cpan.org/
+    
+... easy huh, checkout some of the existing actions or create your own with
+Scrappy, your All Powerful Web Spidering, Scraping, Creeping Crawling Framework.
 
 =head1 DESCRIPTION
 

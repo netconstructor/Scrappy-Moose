@@ -30,15 +30,16 @@ sub crawl {
             if ($data) {
 
                 # found a page match, fetch and scrape the page for data
-                $self->get($url);
+                if ($self->get($url)->page_loaded) {
 
-                foreach my $selector (keys %{$pages{$page}}) {
-
-                    # loop through resultset
-                    foreach my $item (@{$self->select($selector)->data}) {
-
-                        # execute selector code
-                        $pages{$page}->{$selector}->($self, $item, $data);
+                    foreach my $selector (keys(%{$pages{$page}})) {
+    
+                        # loop through resultset
+                        foreach my $item (@{$self->select($selector)->data}) {
+    
+                            # execute selector code
+                            $pages{$page}->{$selector}->($self, $item, $data);
+                        }
                     }
                 }
             }
@@ -332,11 +333,16 @@ The form method is used to submit a form on the current page.
 
 =method get
 
-The get method takes a URL or URI object, fetches a web page and returns an
-HTTP::Response object.
+The get method takes a URL or URI object, fetches a web page and returns the
+Scrappy object.
 
     my  $scraper = Scrappy->new;
-    my  $response = $scraper->get($new_url);
+    
+    if ($scraper->get($new_url)->page_loaded) {
+        ...
+    }
+    
+    # $self->content has the HTTP::Response object
 
 =cut
 

@@ -13,6 +13,7 @@ use DateTime::Format::SQLite;
 use YAML::Syck;
 $YAML::Syck::ImplicitTyping = 1;
 
+has 'auto_save' => (is => 'rw', isa => 'Bool', default => 1);
 has file => (is => 'rw', isa => 'Str');
 has verbose => (is => 'rw', isa => 'Int', default => 0);
 
@@ -40,6 +41,20 @@ encountered using the L<Scrappy> framework.
 The following is a list of object attributes available with every Scrappy::Logger
 instance.
 
+=head3 auto_save
+
+The auto_save attribute is a boolean that determines whether event data is
+automatically saved to the log file on update.
+
+    my  $logger = Scrappy::Logger->new;
+        
+        $logger->load('scraper.log');
+        
+        # turn auto-saving off
+        $logger->auto_save(0);
+        $logger->event('...', 'yada yada yada');
+        $logger->write; # explicit write
+        
 =head3 file
 
 The file attribute gets/sets the filename of the current event-log file.

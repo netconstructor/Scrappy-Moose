@@ -4,6 +4,7 @@ package Scrappy::Scraper;
 use Moose;
 
 # load other libraries
+use File::Util;
 use Scrappy::Logger;
 use Scrappy::Plugin;
 use Scrappy::Queue;
@@ -11,6 +12,7 @@ use Scrappy::Scraper::Control;
 use Scrappy::Scraper::Parser;
 use Scrappy::Scraper::UserAgent;
 use Scrappy::Session;
+use Try::Tiny;
 use URI;
 use Web::Scraper;
 use WWW::Mechanize;
@@ -108,9 +110,18 @@ sub back {
       if defined $self->user_agent->name;
 
     # set html response
-    $self->content($self->worker->back);
+    $self->content('');
+    try {
+        $self->worker->back;
+        $self->content($self->worker->content);
+    }
+    catch {
+        $self->log("error", "navigating to the previous page failed");
+    };
 
-    $self->log("info", "Navigated back to " . $self->url . " successfully");
+    return unless $self->content;
+
+    $self->log("info", "navigated back to " . $self->url . " successfully");
 
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $self->url;
@@ -174,15 +185,16 @@ sub download {
       if defined $self->user_agent->name;
 
     # set html response
-    $dir =~ s/[\\\/]+$//;
-    if (@_ == 3) {
+    if ($url && $dir && $file) {
+        $dir =~ s/[\\\/]+$//;
         $self->get($url);
-        $self->store($dir . '/' . $file);
-        $self->log("info",
-            "$url was downloaded to " . $dir . '/' . $file . " successfully");
+        $self->store(join '/', $dir, $file);
+        $self->log("info", "$url was downloaded to " .
+            join('/', $dir, $file) . " successfully");
         $self->back;
     }
-    elsif (@_ == 2) {
+    elsif ($url && $dir) {
+        $dir =~ s/[\\\/]+$//;
         $self->get($url);
         my @chars = ('a' .. 'z', 'A' .. 'Z', 0 .. 9);
         my $filename = $self->worker->response->filename;
@@ -193,13 +205,33 @@ sub download {
           . $chars[rand(@chars)]
           . $chars[rand(@chars)]
           . $chars[rand(@chars)]
+          . '.downlaod'
           unless $filename;
-        $self->store($dir . '/' . $filename);
-        $self->log("info",
-                "$url was downloaded to " 
-              . $dir . '/'
-              . $filename
-              . " successfully");
+        $self->store(join '/', $dir, $filename);
+        $self->log("info", "$url was downloaded to " .
+            join('/', $dir, $filename) . " successfully");
+        $self->back;
+    }
+    elsif ($url) {
+        $self->get($url);
+        my @chars = ('a' .. 'z', 'A' .. 'Z', 0 .. 9);
+        my $filename = $self->worker->response->filename;
+        $filename =
+            $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . $chars[rand(@chars)]
+          . '.downlaod'
+          unless $filename;
+        $dir = $url->path;
+        $dir =~ s/^\///g;
+        $dir =~ s/\/$filename$//;
+        File::Util->new->make_dir($dir) unless -d $dir || !$dir;
+        $self->store(join '/', $dir, $filename);
+        $self->log("info", "$url was downloaded to " .
+            join('/', $dir, $filename) . " successfully");
         $self->back;
     }
     else {
@@ -237,9 +269,13 @@ sub form {
       if defined $self->user_agent->name;
 
     # set html response
-    $self->content($self->worker->submit_form(@_));
-
-    $self->log("info", "form posted from $url successfully", @_);
+    $self->content('');
+    try {
+        $self->content($self->worker->submit_form(@_));
+    };
+    $self->content ?
+        $self->log("info", "form posted from $url successfully", @_) :
+        $self->log("error", "error POSTing form from $url", @_) ;
 
     #$self->stash->{history} = [] unless defined $self->stash->{history};
     #push @{$self->stash->{history}}, $url;
@@ -298,8 +334,13 @@ sub get {
       if defined $self->user_agent->name;
 
     # set html response
-    $self->content($self->worker->get($url));
-    $self->log("info", "$url was fetched successfully");
+    $self->content('');
+    try {
+        $self->content($self->worker->get($url));
+    };
+    $self->content ?
+        $self->log("info", "$url was fetched successfully") :
+        $self->log("error", "error GETing $url") ;
 
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $url;
@@ -487,9 +528,13 @@ sub page_reload {
       if defined $self->user_agent->name;
 
     # set html response
-    $self->content($self->worker->reload);
-
-    $self->log("info", "page reload successful");
+    $self->content('');
+    try {
+        $self->content($self->worker->reload);
+    };
+    $self->content ?
+        $self->log("info", "page reloaded successfully") :
+        $self->log("error", "error reloading page") ;
 
     my $url = $self->url;
 
@@ -563,9 +608,13 @@ sub post {
       if defined $self->user_agent->name;
 
     # set html response
-    $self->content($self->worker->post(@_));
-
-    $self->log("info", "posted data to $_[0] successfully", @_);
+    $self->content('');
+    try {
+        $self->content($self->worker->post(@_));
+    };
+    $self->content ?
+        $self->log("info", "posted data to $_[0] successfully", @_) :
+        $self->log("error", "error POSTing data to $_[0]", @_) ;
 
     $self->stash->{history} = [] unless defined $self->stash->{history};
     push @{$self->stash->{history}}, $url;
@@ -710,7 +759,36 @@ sub stash {
 }
 
 sub store {
-    return shift->worker->save_content(@_);
+    # return shift->worker->save_content(@_);
+    # oh no i didnt just rewrite www:mech save_content, oh yes i did
+    # ... in hope to avoid content encoding issues
+    
+    my $self = shift;
+    my $filename = shift;
+
+    open( my $fh, '>', $filename )
+        or $self->worker->die( "Unable to create $filename: $!" );
+    
+    if ($self->worker->content_type
+            =~ m{^text/} ||
+        $self->worker->content_type
+            =~ m{^application/(atom|css|javascript|json|rss|xml)}) {
+        # text
+        $self->worker->response->decode;
+        print {$fh} $self->worker->response->content
+            or $self->worker->die( "Unable to write to $filename: $!" );
+    }
+    else {    
+        # binary
+        binmode $fh;
+        print {$fh} $self->worker->response->content
+            or $self->worker->die( "Unable to write to $filename: $!" );
+    }
+    
+    close $fh
+        or $self->worker->die( "Unable to close $filename: $!" );
+
+    return $self;
 }
 
 sub url {
