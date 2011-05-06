@@ -4,6 +4,7 @@ package Scrappy::Scraper;
 use Moose;
 
 # load other libraries
+use Data::Dumper;
 use File::Util;
 use Scrappy::Logger;
 use Scrappy::Plugin;
@@ -250,6 +251,11 @@ sub download {
     sleep $self->pause;
 
     return $self;
+}
+
+sub dumper {
+    shift;
+    return Data::Dumper::Dumper(@_);
 }
 
 sub form {

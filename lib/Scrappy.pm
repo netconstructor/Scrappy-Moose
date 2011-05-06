@@ -306,6 +306,24 @@ the originating page.
 
 =cut
 
+=method dumper
+
+The dumper method is a convenience feature that passes the passed-in objects to
+L<Data::Dumper> which in turn returns a stringified representation of that
+object/data-structure.
+
+    my  $scaper = Scrappy->new;
+    my  $requested_url = '...';
+    
+        $scraper->get($requested_url);
+    
+    my  $data = $scraper->select('//a[@href]')->data;
+    
+    # print out the scraped data
+    print $scraper->dumper($data);
+
+=cut
+
 =method form
 
 The form method is used to submit a form on the current page.

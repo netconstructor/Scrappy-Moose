@@ -321,7 +321,7 @@ sub focus {
     my $self = shift;
     my $index = shift || 0;
 
-    $self->has_html;
+    return $self unless $self->has_html;
     
     $self->html($self->data->[$index]->{html});
     return $self;
@@ -342,7 +342,8 @@ sub scrape {
     my ($self, $selector, $html) = @_;
 
     $self->html($html) if $html;
-    $self->has_html;
+    
+    return [] unless $self->has_html;
 
     $self->select($selector);
     return $self->data;
@@ -364,7 +365,8 @@ sub select {
     my ($self, $selector, $html) = @_;
 
     $self->html($html) if $html;
-    $self->has_html;
+    
+    return $self unless $self->has_html;
 
     $self->worker->{code} = scraper {
         process($selector, "data[]", $self->html_tags);
@@ -389,8 +391,7 @@ been set.
 
 sub has_html {
     my $self = shift;
-    croak("Can't parse HTML document without providing a valid source")
-      unless $self->html;
+    return $self->html ? 1 : 0;
 }
 
 1;

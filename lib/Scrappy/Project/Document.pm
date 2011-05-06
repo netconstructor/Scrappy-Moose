@@ -45,7 +45,7 @@ sub parse {
 
     my $record = {};
     map { $record->{$_} = $self->$_($self->scraper, $vars) } @{$self->fields};
-    $record->{url} = $self->scraper->url->as_string;
+    # $record->{url} = $self->scraper->url->as_string;
     push @{$self->records}, $record;
 
     return $record;
