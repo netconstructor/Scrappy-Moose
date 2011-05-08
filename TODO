@@ -25,6 +25,7 @@
       - create Class for writing out to an XML file
 # CORE PLUGINS
   x   Scrappy::Plugin::RandomProxy - use a random proxy from hidemyass.com
+  -   Scrappy::Plugin::RespectRobot - respect robot.txt files 
   -   Scrappy::Plugin::Email - send emails from your spider
   -   Scrappy::Plugin::RandomUserAgent - use a random user-agent string
   -   Scrappy::Plugin::BlobStore - save chunks of data to disk and return random-generated path
