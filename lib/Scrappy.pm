@@ -690,7 +690,7 @@ L<Scrappy::Scraper::Parser> object which contains the matching elements.
     ->select('div div')->data;
     
     # The code above selects the div > div inside of the 5th tr in #container table
-    # Access tag html, text and other attributes as follows...
+    # Access attributes html, text and other attributes as follows...
     
     $element = $scraper->select('table')->data->[0];
     $element->{html}; # HTML representation of the table

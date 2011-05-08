@@ -379,6 +379,66 @@ sub select {
     return $self;
 }
 
+=method first
+
+The first method is used to return the first element from the extracted dataset.
+
+    my  $parser = Scrappy::Scraper::Parser->new;
+        $parser->select('a', $from_html); #get all links
+        
+    my  $first_link = $parser->first;
+    
+    # equivalent to ...
+    my  $first_link = $parser->data->[0];
+
+=cut
+
+sub first {
+    return shift->data->[0];
+}
+
+=method last
+
+The last method is used to return the last element from the extracted dataset.
+
+    my  $parser = Scrappy::Scraper::Parser->new;
+        $parser->select('a', $from_html); #get all links
+        
+    my  $last_link = $parser->last;
+    
+    # equivalent to ...
+    my  $last_link = $parser->data->[(@{$parser->data}-1)];
+
+=cut
+
+sub last {
+    my  $self = shift;
+    my  $index = @{$self->data} - 1;
+    return $self->data->[$index];
+}
+
+=method each
+
+The each method is used loop through the extracted dataset. The each method
+takes one argument, a code reference, and is passed the each extracted item.
+
+    my  $parser = Scrappy::Scraper::Parser->new;
+        $parser->select('a', $from_html); #get all links
+        
+        $parser->each(sub{
+            print shift->{href} . "\n"
+        });
+
+=cut
+
+sub each {
+    my ($self, $code) = @_;
+    foreach my $item (@{$self->data}) {
+        $code->($item);
+    }
+    return $self;
+}
+
 =method has_html
 
 The has_html method return a boolean which determine whether HTML content has
