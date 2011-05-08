@@ -45,7 +45,7 @@ sub page {
 
                                 $self->content->decode;
                                 my @urls = $self->content->as_string =~
-/url\s{0,}?\(?[\'\"\s]{0,}?([^\)]+)?[\'\"\s]{0,}?\)/g;
+/url\s{0,}?\([\'\"\s]{0,}?([^\)]+)?[\'\"\s]{0,}?\)/g;
 
                                 if (@urls) {
 
