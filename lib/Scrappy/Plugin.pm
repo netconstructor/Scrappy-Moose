@@ -31,31 +31,41 @@ has plugins => (
 
         my @plugins = ();
 
-        eval {
-            # eval fixes bug found by Patrick Woo
+        # fix for bug found by Patrick Woo
 
-            #Can't stat /etc/perl/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat /usr/local/lib/perl/5.10.1/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat /usr/lib/perl5/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat /usr/share/perl5/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat /usr/lib/perl/5.10/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat /usr/share/perl/5.10/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat /usr/local/lib/site_perl/Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
-            #Can't stat ./Scrappy/Plugin: No such file or directory
-            #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /etc/perl/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /usr/local/lib/perl/5.10.1/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /usr/lib/perl5/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /usr/share/perl5/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /usr/lib/perl/5.10/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /usr/share/perl/5.10/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat /usr/local/lib/site_perl/Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        #Can't stat ./Scrappy/Plugin: No such file or directory
+        #at /usr/share/perl5/File/Find/Rule.pm line 595
+        
+        # ... (IMO) due to analyzing @INC assuming each path has Scrappy in it
             
-            # ... (IMO) due to analyzing @INC assuming each path has Scrappy in it
+            my  $library;
+            
+            foreach my $dir (@INC) {
+                if (-d "$dir/Scrappy/Plugin") {
+                    $library = "$dir/Scrappy/Plugin";
+                    last;
+                }
+            }
+            
+            return [] unless $library;
             
             my @files =
               File::Find::Rule->file()->name('*.pm')
-              ->in(map {"$_/Scrappy/Plugin"} @INC);
+              ->in($library);
     
             my %plugins =
               map { $_ => 1 }
@@ -72,7 +82,6 @@ has plugins => (
                 }
     
             }
-        };
 
         return [@plugins];
     }
