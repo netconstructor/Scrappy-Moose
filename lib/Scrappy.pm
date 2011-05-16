@@ -69,19 +69,13 @@ And now manually, ... without crawl, the above is similar to the following ...
     #!/usr/bin/perl
     use Scrappy;
 
-    my $scraper = Scrappy->new;
-    my $q       = $scraper->queue;
-    
-    $q->add('http://search.cpan.org/recent'); # starting url
-    
-    while (my $url = $q->next) {
+    my  $scraper = Scrappy->new;
         
-        $scraper->get($url);
-        
-        foreach my $link (@{ $scraper->select('#cpansearch li a')->data }) {
-            $q->add($link->href);
+        if ($scraper->get($url)->page_loaded) {
+            $scraper->select('#cpansearch li a')->each(sub{
+                print shift->{href}, "\n";
+            });
         }
-    }
 
 =head1 DESCRIPTION
 

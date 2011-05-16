@@ -31,25 +31,48 @@ has plugins => (
 
         my @plugins = ();
 
-        my @files =
-          File::Find::Rule->file()->name('*.pm')
-          ->in(map {"$_/Scrappy/Plugin"} @INC);
+        eval {
+            # eval fixes bug found by Patrick Woo
 
-        my %plugins =
-          map { $_ => 1 }
-          map { s/.*(Scrappy[\\\/]Plugin[\\\/].*\.pm)/$1/; $_ }
-          @files;    #uniquenes
-
-        for my $plugin (keys %plugins) {
-
-            my ($plug) = $plugin =~ /(Scrappy\/Plugin\/.*)\.pm/;
-
-            if ($plug) {
-                $plug =~ s/\//::/g;
-                push @plugins, $plug;
+            #Can't stat /etc/perl/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat /usr/local/lib/perl/5.10.1/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat /usr/lib/perl5/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat /usr/share/perl5/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat /usr/lib/perl/5.10/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat /usr/share/perl/5.10/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat /usr/local/lib/site_perl/Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            #Can't stat ./Scrappy/Plugin: No such file or directory
+            #at /usr/share/perl5/File/Find/Rule.pm line 595
+            
+            # ... (IMO) due to analyzing @INC assuming each path has Scrappy in it
+            
+            my @files =
+              File::Find::Rule->file()->name('*.pm')
+              ->in(map {"$_/Scrappy/Plugin"} @INC);
+    
+            my %plugins =
+              map { $_ => 1 }
+              map { s/.*(Scrappy[\\\/]Plugin[\\\/].*\.pm)/$1/; $_ }
+              @files;    #uniquenes
+    
+            for my $plugin (keys %plugins) {
+    
+                my ($plug) = $plugin =~ /(Scrappy\/Plugin\/.*)\.pm/;
+    
+                if ($plug) {
+                    $plug =~ s/\//::/g;
+                    push @plugins, $plug;
+                }
+    
             }
-
-        }
+        };
 
         return [@plugins];
     }
