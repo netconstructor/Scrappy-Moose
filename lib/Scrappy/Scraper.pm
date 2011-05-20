@@ -378,7 +378,7 @@ sub get {
             $self->session->write;
 
         }
-    );
+    ) if $self->session->file;
 
     $self->worker->{params} = {};
     $self->worker->{params} =
