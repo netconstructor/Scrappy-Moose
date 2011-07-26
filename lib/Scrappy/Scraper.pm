@@ -264,8 +264,9 @@ sub form {
 
     # set html response
     $self->content('');
+    my @args = @_;
     try {
-        $self->content($self->worker->submit_form(@_));
+        $self->content($self->worker->submit_form(@args));
     };
     if ($self->content) {
         # access control
@@ -617,8 +618,9 @@ sub post {
 
     # set html response
     $self->content('');
+    my @args = @_;
     try {
-        $self->content($self->worker->post(@_)) ;
+        $self->content($self->worker->post(@args)) ;
     };
     if ($self->content) {
         # access control
