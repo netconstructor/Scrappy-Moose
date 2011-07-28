@@ -417,6 +417,43 @@ sub last {
     return $self->data->[$index];
 }
 
+=method select_first
+
+The select_first method is a convenience feature combining the select() and first()
+methods to return the first element from the extracted data.
+
+    my  $parser = Scrappy::Scraper::Parser->new;
+        $parser->select_first('a'); #get link text
+        $parser->select_first('a', 'href'); #get link URL
+
+=cut
+
+sub select_first {
+    my  ($self, $selector, $attribute) = @_;
+    $self->select($selector);
+    return $self->data->[0] ?
+        $self->data->[0]->{$attribute || 'text'} : '';
+}
+
+=method select_last
+
+The select_last method is a convenience feature combining the select() and last()
+methods to return the last element from the extracted data.
+
+    my  $parser = Scrappy::Scraper::Parser->new;
+        $parser->select_last('a'); #get link text
+        $parser->select_last('a', 'href'); #get link URL
+
+=cut
+
+sub select_last {
+    my  ($self, $selector, $attribute) = @_;
+    $self->select($selector);
+    my  $index = @{$self->data} - 1;
+    return $self->data->[$index] ?
+        $self->data->[$index]->{$attribute || 'text'} : '';
+}
+
 =method each
 
 The each method is used loop through the extracted dataset. The each method
