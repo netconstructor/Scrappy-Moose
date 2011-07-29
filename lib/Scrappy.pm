@@ -412,7 +412,35 @@ according to the HTTP headers.
     my $scraper = Scrappy->new;
     
         $scraper->get($requested_url);
-        if ($scraper->is_html) {
+        if ($scraper->page_ishtml) {
+            ...
+        }
+
+=cut
+
+=method page_isjson
+
+The page_isjson method returns true/false based on whether our content is JSON,
+according to the HTTP headers.
+
+    my $scraper = Scrappy->new;
+    
+        $scraper->get($requested_url);
+        if ($scraper->page_isjson) {
+            ...
+        }
+
+=cut
+
+=method page_isxml
+
+The page_isxml method returns true/false based on whether our content is XML,
+according to the HTTP headers.
+
+    my $scraper = Scrappy->new;
+    
+        $scraper->get($requested_url);
+        if ($scraper->page_isxml) {
             ...
         }
 

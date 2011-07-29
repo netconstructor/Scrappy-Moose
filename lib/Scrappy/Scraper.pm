@@ -424,6 +424,18 @@ sub page_ishtml {
     return shift->worker->is_html;
 }
 
+sub page_isjson {
+    my $self = shift;
+    return defined $self->worker->ct &&
+        ($self->worker->ct =~ '\/json$');
+}
+
+sub page_isxml {
+    my $self = shift;
+    return defined $self->worker->ct &&
+        ($self->worker->ct =~ '\/xml$');
+}
+
 sub page_loaded {
     return shift->worker->success;
 }
